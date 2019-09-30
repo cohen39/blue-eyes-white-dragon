@@ -1,8 +1,0 @@
-prefix=/home/zp/aae497/blue-eyes-white-dragon/ros_jgp/devel/.private/f16
-
-Name: f16
-Description: Description of f16
-Version: 0.0.0
-Cflags: 
-Libs: -L/home/zp/aae497/blue-eyes-white-dragon/ros_jgp/devel/.private/f16/lib 
-Requires: 

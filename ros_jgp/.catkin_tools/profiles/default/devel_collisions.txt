@@ -1,7 +1,0 @@
-/home/zp/aae497/blue-eyes-white-dragon/ros_jgp/devel/lib/pkgconfig/f16.pc 1
-/home/zp/aae497/blue-eyes-white-dragon/ros_jgp/devel/./cmake.lock 1
-/home/zp/aae497/blue-eyes-white-dragon/ros_jgp/devel/lib/libF16Plugin.so 1
-/home/zp/aae497/blue-eyes-white-dragon/ros_jgp/devel/lib/libRocketPlugin.so 1
-/home/zp/aae497/blue-eyes-white-dragon/ros_jgp/devel/share/f16/cmake/f16Config.cmake 1
-/home/zp/aae497/blue-eyes-white-dragon/ros_jgp/devel/share/f16/cmake/f16Config-version.cmake 1
-/home/zp/aae497/blue-eyes-white-dragon/ros_jgp/devel/lib/libf16_msgs.so 1

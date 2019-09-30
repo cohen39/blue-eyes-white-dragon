@@ -1,7 +1,7 @@
 import casadi as ca
 import sys
 
-sys.path.insert(0, '/home/zp/aae497/aae497-f19/python/pyecca')
+sys.path.insert(0, '../../../../../python/pyecca')
 from pyecca.lie import so3
 from pyecca.util import rk4
 

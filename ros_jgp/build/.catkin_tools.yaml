@@ -1,6 +1,0 @@
-devel_space: /home/zp/aae497/blue-eyes-white-dragon/ros_jgp/devel
-install: false
-install_space: /home/zp/aae497/blue-eyes-white-dragon/ros_jgp/install
-profile: default
-source_space: /home/zp/aae497/blue-eyes-white-dragon/ros_jgp/src
-workspace: /home/zp/aae497/blue-eyes-white-dragon/ros_jgp

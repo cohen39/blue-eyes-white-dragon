@@ -1,6 +1,0 @@
-Symlinking /home/zp/aae497/aae497-f19/ros/devel/lib/libF16Plugin.so
-Symlinking /home/zp/aae497/aae497-f19/ros/devel/lib/libRocketPlugin.so
-Symlinking /home/zp/aae497/aae497-f19/ros/devel/lib/libf16_msgs.so
-Linked: (/home/zp/aae497/aae497-f19/ros/devel/.private/f16/lib/pkgconfig/f16.pc, /home/zp/aae497/aae497-f19/ros/devel/lib/pkgconfig/f16.pc)
-Linked: (/home/zp/aae497/aae497-f19/ros/devel/.private/f16/share/f16/cmake/f16Config-version.cmake, /home/zp/aae497/aae497-f19/ros/devel/share/f16/cmake/f16Config-version.cmake)
-Linked: (/home/zp/aae497/aae497-f19/ros/devel/.private/f16/share/f16/cmake/f16Config.cmake, /home/zp/aae497/aae497-f19/ros/devel/share/f16/cmake/f16Config.cmake)

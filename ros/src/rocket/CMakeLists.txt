@@ -7,10 +7,9 @@ project(rocket)
 ## Find catkin macros and libraries
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
 ## is used, also find other catkin packages
-find_package(catkin REQUIRED COMPONENTS
-  Protobuf
-  gazebo
-)
+find_package(catkin REQUIRED)
+find_package(gazebo REQUIRED)
+find_package(Protobuf REQUIRED)
 
 ## System dependencies are found with CMake's conventions
 # find_package(Boost REQUIRED COMPONENTS system)
@@ -103,8 +102,8 @@ find_package(catkin REQUIRED COMPONENTS
 ## DEPENDS: system dependencies of this project that dependent projects also need
 catkin_package(
 #  INCLUDE_DIRS include
-#  LIBRARIES rocket
-#  CATKIN_DEPENDS Protobuf gazebo
+#  LIBRARIES f16
+#  CATKIN_DEPENDS other_catkin_pkg
 #  DEPENDS system_lib
 )
 
@@ -115,14 +114,48 @@ catkin_package(
 ## Specify additional locations of header files
 ## Your package locations should be listed before other locations
 include_directories(
-# include
-  ${catkin_INCLUDE_DIRS}
+ include
+ src
+ ${catkin_INCLUDE_DIRS}
+ ${GAZEBO_INCLUDE_DIRS}
+ ${CMAKE_BINARY_DIR}
 )
 
+# Protobuf library
+#set(PROTOBUF_IMPORT_DIRS)
+#foreach(ITR ${GAZEBO_INCLUDE_DIRS})
+  #if(ITR MATCHES ".*gazebo-[0-9.]+$")
+    #set(PROTOBUF_IMPORT_DIRS "${ITR}/gazebo/msgs/proto")
+  #endif()
+#endforeach()
+set (msgs
+  src/rocket.proto
+  #${PROTOBUF_IMPORT_DIRS}/vector2d.proto
+  #${PROTOBUF_IMPORT_DIRS}/header.proto
+  #${PROTOBUF_IMPORT_DIRS}/time.proto
+)
+PROTOBUF_GENERATE_CPP(PROTO_SRCS PROTO_HDRS ${msgs})
+
+add_library(rocket_msgs SHARED ${PROTO_SRCS})
+target_link_libraries(rocket_msgs ${PROTOBUF_LIBRARY})
+
 ## Declare a C++ library
-# add_library(${PROJECT_NAME}
-#   src/${PROJECT_NAME}/rocket.cpp
-# )
+add_library(RocketPlugin
+	src/RocketPlugin/RocketPlugin.cc
+	src/RocketPlugin/casadi_gen.c
+)
+target_link_libraries(RocketPlugin ${GAZEBO_LIBRARIES} rocket_msgs)
+
+target_compile_options(RocketPlugin PRIVATE
+	-Wno-missing-declarations
+	-Wno-float-equal
+	-Wno-shadow
+	-Wno-unused-result
+	-Wno-maybe-uninitialized
+	)
+
+target_compile_definitions(RocketPlugin
+	PUBLIC -Dcasadi_int=int -Dcasadi_real=double)
 
 ## Add cmake target dependencies of the library
 ## as an example, code may need to be generated before libraries
@@ -132,7 +165,7 @@ include_directories(
 ## Declare a C++ executable
 ## With catkin_make all packages are built within a single CMake context
 ## The recommended prefix ensures that target names across packages don't collide
-# add_executable(${PROJECT_NAME}_node src/rocket_node.cpp)
+# add_executable(${PROJECT_NAME}_node src/f16_node.cpp)
 
 ## Rename C++ executable without prefix
 ## The above recommended prefix causes long target names, the following renames the
@@ -163,18 +196,11 @@ include_directories(
 #   DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 # )
 
-## Mark executables for installation
-## See http://docs.ros.org/melodic/api/catkin/html/howto/format1/building_executables.html
-# install(TARGETS ${PROJECT_NAME}_node
-#   RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
-# )
-
-## Mark libraries for installation
-## See http://docs.ros.org/melodic/api/catkin/html/howto/format1/building_libraries.html
-# install(TARGETS ${PROJECT_NAME}
+## Mark executables and/or libraries for installation
+# install(TARGETS ${PROJECT_NAME} ${PROJECT_NAME}_node
 #   ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
 #   LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
-#   RUNTIME DESTINATION ${CATKIN_GLOBAL_BIN_DESTINATION}
+#   RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 # )
 
 ## Mark cpp header files for installation
@@ -196,7 +222,7 @@ include_directories(
 #############
 
 ## Add gtest based cpp test target and link libraries
-# catkin_add_gtest(${PROJECT_NAME}-test test/test_rocket.cpp)
+# catkin_add_gtest(${PROJECT_NAME}-test test/test_f16.cpp)
 # if(TARGET ${PROJECT_NAME}-test)
 #   target_link_libraries(${PROJECT_NAME}-test ${PROJECT_NAME})
 # endif()

@@ -1,0 +1,8 @@
+prefix=/home/zp/aae497/blue-eyes-white-dragon/ros_jgp/install
+
+Name: f16
+Description: Description of f16
+Version: 0.0.0
+Cflags: 
+Libs: -L/home/zp/aae497/blue-eyes-white-dragon/ros_jgp/install/lib 
+Requires: 

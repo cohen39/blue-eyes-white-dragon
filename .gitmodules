@@ -1,0 +1,3 @@
+[submodule "python/pyecca"]
+	path = python/pyecca
+	url = git@github.com:jgoppert/pyecca.git

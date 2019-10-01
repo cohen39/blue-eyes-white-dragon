@@ -1,0 +1,24 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/taehwan/Desktop/programmings/dragon/blue-eyes-white-dragon/ros/src/rocket/src/RocketPlugin/casadi_gen.c
+math.h
+-
+stdio.h
+-
+string.h
+-
+casadi/mem.h
+-
+
+/home/taehwan/Desktop/programmings/dragon/blue-eyes-white-dragon/ros/src/rocket/src/casadi/mem.h
+stdlib.h
+-
+assert.h
+-
+

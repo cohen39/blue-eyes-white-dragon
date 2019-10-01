@@ -1,0 +1,69 @@
+[01m[K/home/taehwan/Desktop/programmings/dragon/blue-eyes-white-dragon/ros/src/rocket/src/RocketPlugin/RocketPlugin.cc:[m[K In constructor ‘[01m[Kgazebo::RocketPlugin::RocketPlugin()[m[K’:
+[01m[K/home/taehwan/Desktop/programmings/dragon/blue-eyes-white-dragon/ros/src/rocket/src/RocketPlugin/RocketPlugin.cc:35:38:[m[K [01;31m[Kerror: [m[Kno matching function for call to ‘[01m[KCasadiFunc::CasadiFunc()[m[K’
+  _double_this(double_this_functions()[01;31m[K)[m[K
+                                      [01;31m[K^[m[K
+In file included from [01m[K/home/taehwan/Desktop/programmings/dragon/blue-eyes-white-dragon/ros/src/rocket/src/RocketPlugin/RocketPlugin.hh:33:0[m[K,
+                 from [01m[K/home/taehwan/Desktop/programmings/dragon/blue-eyes-white-dragon/ros/src/rocket/src/RocketPlugin/RocketPlugin.cc:26[m[K:
+[01m[K/home/taehwan/Desktop/programmings/dragon/blue-eyes-white-dragon/ros/src/rocket/src/casadi/CasadiFunc.hpp:9:2:[m[K [01;36m[Knote: [m[Kcandidate: CasadiFunc::CasadiFunc(casadi_functions*)
+  [01;36m[KCasadiFunc[m[K(casadi_functions *f) :
+  [01;36m[K^~~~~~~~~~[m[K
+[01m[K/home/taehwan/Desktop/programmings/dragon/blue-eyes-white-dragon/ros/src/rocket/src/casadi/CasadiFunc.hpp:9:2:[m[K [01;36m[Knote: [m[K  candidate expects 1 argument, 0 provided
+[01m[K/home/taehwan/Desktop/programmings/dragon/blue-eyes-white-dragon/ros/src/rocket/src/casadi/CasadiFunc.hpp:4:7:[m[K [01;36m[Knote: [m[Kcandidate: constexpr CasadiFunc::CasadiFunc(const CasadiFunc&)
+ class [01;36m[KCasadiFunc[m[K
+       [01;36m[K^~~~~~~~~~[m[K
+[01m[K/home/taehwan/Desktop/programmings/dragon/blue-eyes-white-dragon/ros/src/rocket/src/casadi/CasadiFunc.hpp:4:7:[m[K [01;36m[Knote: [m[K  candidate expects 1 argument, 0 provided
+[01m[K/home/taehwan/Desktop/programmings/dragon/blue-eyes-white-dragon/ros/src/rocket/src/RocketPlugin/RocketPlugin.cc:35:38:[m[K [01;31m[Kerror: [m[Kno matching function for call to ‘[01m[KCasadiFunc::CasadiFunc()[m[K’
+  _double_this(double_this_functions()[01;31m[K)[m[K
+                                      [01;31m[K^[m[K
+In file included from [01m[K/home/taehwan/Desktop/programmings/dragon/blue-eyes-white-dragon/ros/src/rocket/src/RocketPlugin/RocketPlugin.hh:33:0[m[K,
+                 from [01m[K/home/taehwan/Desktop/programmings/dragon/blue-eyes-white-dragon/ros/src/rocket/src/RocketPlugin/RocketPlugin.cc:26[m[K:
+[01m[K/home/taehwan/Desktop/programmings/dragon/blue-eyes-white-dragon/ros/src/rocket/src/casadi/CasadiFunc.hpp:9:2:[m[K [01;36m[Knote: [m[Kcandidate: CasadiFunc::CasadiFunc(casadi_functions*)
+  [01;36m[KCasadiFunc[m[K(casadi_functions *f) :
+  [01;36m[K^~~~~~~~~~[m[K
+[01m[K/home/taehwan/Desktop/programmings/dragon/blue-eyes-white-dragon/ros/src/rocket/src/casadi/CasadiFunc.hpp:9:2:[m[K [01;36m[Knote: [m[K  candidate expects 1 argument, 0 provided
+[01m[K/home/taehwan/Desktop/programmings/dragon/blue-eyes-white-dragon/ros/src/rocket/src/casadi/CasadiFunc.hpp:4:7:[m[K [01;36m[Knote: [m[Kcandidate: constexpr CasadiFunc::CasadiFunc(const CasadiFunc&)
+ class [01;36m[KCasadiFunc[m[K
+       [01;36m[K^~~~~~~~~~[m[K
+[01m[K/home/taehwan/Desktop/programmings/dragon/blue-eyes-white-dragon/ros/src/rocket/src/casadi/CasadiFunc.hpp:4:7:[m[K [01;36m[Knote: [m[K  candidate expects 1 argument, 0 provided
+[01m[K/home/taehwan/Desktop/programmings/dragon/blue-eyes-white-dragon/ros/src/rocket/src/RocketPlugin/RocketPlugin.cc:35:38:[m[K [01;31m[Kerror: [m[Kno matching function for call to ‘[01m[KCasadiFunc::CasadiFunc()[m[K’
+  _double_this(double_this_functions()[01;31m[K)[m[K
+                                      [01;31m[K^[m[K
+In file included from [01m[K/home/taehwan/Desktop/programmings/dragon/blue-eyes-white-dragon/ros/src/rocket/src/RocketPlugin/RocketPlugin.hh:33:0[m[K,
+                 from [01m[K/home/taehwan/Desktop/programmings/dragon/blue-eyes-white-dragon/ros/src/rocket/src/RocketPlugin/RocketPlugin.cc:26[m[K:
+[01m[K/home/taehwan/Desktop/programmings/dragon/blue-eyes-white-dragon/ros/src/rocket/src/casadi/CasadiFunc.hpp:9:2:[m[K [01;36m[Knote: [m[Kcandidate: CasadiFunc::CasadiFunc(casadi_functions*)
+  [01;36m[KCasadiFunc[m[K(casadi_functions *f) :
+  [01;36m[K^~~~~~~~~~[m[K
+[01m[K/home/taehwan/Desktop/programmings/dragon/blue-eyes-white-dragon/ros/src/rocket/src/casadi/CasadiFunc.hpp:9:2:[m[K [01;36m[Knote: [m[K  candidate expects 1 argument, 0 provided
+[01m[K/home/taehwan/Desktop/programmings/dragon/blue-eyes-white-dragon/ros/src/rocket/src/casadi/CasadiFunc.hpp:4:7:[m[K [01;36m[Knote: [m[Kcandidate: constexpr CasadiFunc::CasadiFunc(const CasadiFunc&)
+ class [01;36m[KCasadiFunc[m[K
+       [01;36m[K^~~~~~~~~~[m[K
+[01m[K/home/taehwan/Desktop/programmings/dragon/blue-eyes-white-dragon/ros/src/rocket/src/casadi/CasadiFunc.hpp:4:7:[m[K [01;36m[Knote: [m[K  candidate expects 1 argument, 0 provided
+[01m[K/home/taehwan/Desktop/programmings/dragon/blue-eyes-white-dragon/ros/src/rocket/src/RocketPlugin/RocketPlugin.cc:35:38:[m[K [01;31m[Kerror: [m[Kno matching function for call to ‘[01m[KCasadiFunc::CasadiFunc()[m[K’
+  _double_this(double_this_functions()[01;31m[K)[m[K
+                                      [01;31m[K^[m[K
+In file included from [01m[K/home/taehwan/Desktop/programmings/dragon/blue-eyes-white-dragon/ros/src/rocket/src/RocketPlugin/RocketPlugin.hh:33:0[m[K,
+                 from [01m[K/home/taehwan/Desktop/programmings/dragon/blue-eyes-white-dragon/ros/src/rocket/src/RocketPlugin/RocketPlugin.cc:26[m[K:
+[01m[K/home/taehwan/Desktop/programmings/dragon/blue-eyes-white-dragon/ros/src/rocket/src/casadi/CasadiFunc.hpp:9:2:[m[K [01;36m[Knote: [m[Kcandidate: CasadiFunc::CasadiFunc(casadi_functions*)
+  [01;36m[KCasadiFunc[m[K(casadi_functions *f) :
+  [01;36m[K^~~~~~~~~~[m[K
+[01m[K/home/taehwan/Desktop/programmings/dragon/blue-eyes-white-dragon/ros/src/rocket/src/casadi/CasadiFunc.hpp:9:2:[m[K [01;36m[Knote: [m[K  candidate expects 1 argument, 0 provided
+[01m[K/home/taehwan/Desktop/programmings/dragon/blue-eyes-white-dragon/ros/src/rocket/src/casadi/CasadiFunc.hpp:4:7:[m[K [01;36m[Knote: [m[Kcandidate: constexpr CasadiFunc::CasadiFunc(const CasadiFunc&)
+ class [01;36m[KCasadiFunc[m[K
+       [01;36m[K^~~~~~~~~~[m[K
+[01m[K/home/taehwan/Desktop/programmings/dragon/blue-eyes-white-dragon/ros/src/rocket/src/casadi/CasadiFunc.hpp:4:7:[m[K [01;36m[Knote: [m[K  candidate expects 1 argument, 0 provided
+[01m[K/home/taehwan/Desktop/programmings/dragon/blue-eyes-white-dragon/ros/src/rocket/src/RocketPlugin/RocketPlugin.cc:[m[K At global scope:
+[01m[K/home/taehwan/Desktop/programmings/dragon/blue-eyes-white-dragon/ros/src/rocket/src/RocketPlugin/RocketPlugin.cc:46:22:[m[K [01;31m[Kerror: [m[Kexpected constructor, destructor, or type conversion before ‘[01m[K([m[K’ token
+   _rocket_aero_forces[01;31m[K([m[Krocket_aero_forces())
+                      [01;31m[K^[m[K
+[01m[K/home/taehwan/Desktop/programmings/dragon/blue-eyes-white-dragon/ros/src/rocket/src/RocketPlugin/RocketPlugin.cc:50:23:[m[K [01;31m[Kerror: [m[Kexpected constructor, destructor, or type conversion before ‘[01m[K([m[K’ token
+   _rocket_aero_moments[01;31m[K([m[Krocket_aero_moment())
+                       [01;31m[K^[m[K
+[01m[K/home/taehwan/Desktop/programmings/dragon/blue-eyes-white-dragon/ros/src/rocket/src/RocketPlugin/RocketPlugin.cc:54:22:[m[K [01;31m[Kerror: [m[Kexpected constructor, destructor, or type conversion before ‘[01m[K([m[K’ token
+   _rocket_prop_forces[01;31m[K([m[Krocket_prop_forces())
+                      [01;31m[K^[m[K
+[01m[K/home/taehwan/Desktop/programmings/dragon/blue-eyes-white-dragon/ros/src/rocket/src/RocketPlugin/RocketPlugin.cc:58:23:[m[K [01;31m[Kerror: [m[Kexpected constructor, destructor, or type conversion before ‘[01m[K([m[K’ token
+   _rocket_prop_moments[01;31m[K([m[Krocket_prop_moments())
+                       [01;31m[K^[m[K
+make[2]: *** [CMakeFiles/RocketPlugin.dir/src/RocketPlugin/RocketPlugin.cc.o] Error 1
+make[1]: *** [CMakeFiles/RocketPlugin.dir/all] Error 2
+make: *** [all] Error 2

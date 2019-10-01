@@ -32,6 +32,7 @@
 #include "rocket.pb.h"
 #include "casadi/CasadiFunc.hpp"
 #include "casadi_gen.h"
+#include "casadi_gen_rocket.h"
 
 namespace gazebo
 {
@@ -130,6 +131,10 @@ namespace gazebo
 
 	/// \brief Our casadi function
     private: CasadiFunc _double_this;
+    private: CasadiFunc _rocket_aero_forces;
+    private: CasadiFunc _rocket_aero_moments;
+    private: CasadiFunc _rocket_prop_forces;
+    private: CasadiFunc _rocket_prop_moments;
   };
 }
 #endif

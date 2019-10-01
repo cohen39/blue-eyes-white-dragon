@@ -1,6 +1,0 @@
-devel_space: /home/taehwan/Desktop/programmings/dragon/blue-eyes-white-dragon/ros/devel
-install: false
-install_space: /home/taehwan/Desktop/programmings/dragon/blue-eyes-white-dragon/ros/install
-profile: default
-source_space: /home/taehwan/Desktop/programmings/dragon/blue-eyes-white-dragon/ros/src
-workspace: /home/taehwan/Desktop/programmings/dragon/blue-eyes-white-dragon/ros

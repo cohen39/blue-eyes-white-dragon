@@ -45,19 +45,75 @@ RocketPlugin::RocketPlugin():
 // TODO:
   _rocket_aero_forces(rocket_aero_forces())
 {
-
+	std::cout << "hello rocket plugin for aero forces" << std::endl;
+	double x;
+	double u;
+	double p;
+	double FA_b;
+	_rocket_aero_forces.arg(0, &x);
+	_rocket_aero_forces.arg(1, &u);
+	_rocket_aero_forces.arg(2, &p);
+	_rocket_aero_forces.res(0, &FA_b);
+	_rocket_aero_forces.eval();
+	
+	int i;
+	for (i=0;i<3;i++) {
+	std::cout << "FA_b" << FA_b[i] << std::endl;
+	}	
 }
   _rocket_aero_moments(rocket_aero_moment())
 {
-
+	std::cout << "hello rocket plugin for aero momento" << std::endl;
+	double x;
+	double u;
+	double p;
+	double MA_b;
+	_rocket_aero_forces.arg(0, &x);
+	_rocket_aero_forces.arg(1, &u);
+	_rocket_aero_forces.arg(2, &p);
+	_rocket_aero_forces.res(0, &MA_b);
+	_rocket_aero_forces.eval();
+	
+	int i;
+	for (i=0;i<3;i++) {
+	std::cout << "MA_b" << MA_b[i] << std::endl;
+	}
 }
   _rocket_prop_forces(rocket_prop_forces())
 {
-
+	std::cout << "hello rocket plugin for Prop Force" << std::endl;
+	double x;
+	double u;
+	double p;
+	double FP_b;
+	_rocket_aero_forces.arg(0, &x);
+	_rocket_aero_forces.arg(1, &u);
+	_rocket_aero_forces.arg(2, &p);
+	_rocket_aero_forces.res(0, &FP_b);
+	_rocket_aero_forces.eval();
+	
+	int i;
+	for (i=0;i<3;i++) {
+	std::cout << "FP_b" << FP_b[i] << std::endl;
+	}
 }
   _rocket_prop_moments(rocket_prop_moments())
 {
-
+	std::cout << "hello rocket plugin for Prop Moment" << std::endl;
+	double x;
+	double u;
+	double p;
+	double MP_b;
+	_rocket_aero_forces.arg(0, &x);
+	_rocket_aero_forces.arg(1, &u);
+	_rocket_aero_forces.arg(2, &p);
+	_rocket_aero_forces.res(0, &MP_b);
+	_rocket_aero_forces.eval();
+	
+	int i;
+	for (i=0;i<3;i++) {
+	std::cout << "MP_b" << MP_b[i] << std::endl;
+	}
 }
 // END TODO
 

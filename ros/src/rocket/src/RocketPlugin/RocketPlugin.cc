@@ -42,6 +42,24 @@ RocketPlugin::RocketPlugin():
 	_double_this.eval();
 	std::cout << "input" << input << "result" << res << std::endl;
 }
+// TODO:
+  _rocket_aero_forces(rocket_aero_forces())
+{
+
+}
+  _rocket_aero_moments(rocket_aero_moment())
+{
+
+}
+  _rocket_prop_forces(rocket_prop_forces())
+{
+
+}
+  _rocket_prop_moments(rocket_prop_moments())
+{
+
+}
+// END TODO
 
 /////////////////////////////////////////////////
 RocketPlugin::~RocketPlugin()

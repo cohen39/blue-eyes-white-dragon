@@ -1,0 +1,29 @@
+digraph G {
+rankdir=BT;
+94892850835280 -> 0:f0;
+94892851329392 -> 0:f1;
+0 [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0"><TR><TD PORT='f0' BGCOLOR='#eeeeee'> <font color='#666666'>(0,0|0)</font> </TD></TR><TR><TD PORT='f1' BGCOLOR='#eeeeee'> <font color='#666666'>(1,0|1)</font> </TD></TR><TR><TD BGCOLOR='#eeeeee'>0</TD></TR></TABLE>>, shape=plaintext];
+94892850947968 [label="sq(| <f0> | )", shape=Mrecord];
+94892850619984 -> 94892850947968:f0;
+94892850835200 [label="6.28319", shape=box, style=bold];
+94892850835280 [label="*", shape=oval];
+94892850352864 -> 94892850835280;
+94892850947968 -> 94892850835280;
+94892851329296 [label="*", shape=oval];
+94892850835232 -> 94892851329296;
+94892850835280 -> 94892851329296;
+94892849752976 [label=RHO, shape=box, style=solid];
+94892850619984 [label=VT, shape=box, style=solid];
+94892850352864 [label="*", shape=oval];
+94892850269024 -> 94892850352864;
+94892849752976 -> 94892850352864;
+94892850835232 [label="*", shape=oval];
+94892850835200 -> 94892850835232;
+94892849293680 -> 94892850835232;
+94892850269024 [label="0.5", shape=box, style=bold];
+94892851329440 [label="0.1", shape=box, style=bold];
+94892851329392 [label="*", shape=oval];
+94892851329440 -> 94892851329392;
+94892851329296 -> 94892851329392;
+94892849293680 [label=el, shape=box, style=solid];
+}

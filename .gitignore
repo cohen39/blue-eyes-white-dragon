@@ -1,3 +1,6 @@
-\ros\build
-\ros\devel
-\ros\log
+#C++ extension
+*.so
+
+build/
+devel/
+log/

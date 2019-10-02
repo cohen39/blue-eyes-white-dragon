@@ -32,90 +32,38 @@ GZ_REGISTER_MODEL_PLUGIN(RocketPlugin)
 
 ////////////////////////////////////////////////////////////////////////////////
 RocketPlugin::RocketPlugin():
-	_double_this(double_this_functions())
+	_double_this(double_this_functions()),
+  _rocket_aero_forces(rocket_aero_forces_functions()),
+  _rocket_aero_moments(rocket_aero_moments_functions()),
+  _rocket_prop_forces(rocket_prop_forces_functions()),
+  _rocket_prop_moments(rocket_prop_moments_functions())
 {
-	std::cout << "hello rocket plugin" << std::endl;
-	double input = 1;
-	double res = 0;
-	_double_this.arg(0, &input);
-	_double_this.res(0, &res);
-	_double_this.eval();
-	std::cout << "input" << input << "result" << res << std::endl;
+
+  //Build array of constant parameters
+  double p[15] = 
+  {
+    9.81,         //gravitational constant
+    1,            //Jxx
+    1,            //Jyy
+    1,            //Jzz
+    0.1,          //Jxz
+    350,          //Ve
+    1.0,          //l_fin
+    2*3.14159265, //C_L_alpha
+    0,            //C_L_0
+    0.01,         //C_D_0
+    0.01,         //K
+    0.05,         //sFin
+    1.225,        //rho
+    0.2,          //m_empty
+    1.0           //l_motor
+  };
+
+  _rocket_aero_forces.arg (2,p); //Set rocket constant parameters for each eom
+  _rocket_aero_moments.arg(2,p); //Set rocket constant parameters for each eom
+  _rocket_prop_forces.arg (2,p); //Set rocket constant parameters for each eom
+  _rocket_prop_moments.arg(2,p); //Set rocket constant parameters for each eom
 }
-// TODO:
-  _rocket_aero_forces(rocket_aero_forces())
-{
-	std::cout << "hello rocket plugin for aero forces" << std::endl;
-	double x;
-	double u;
-	double p;
-	double FA_b;
-	_rocket_aero_forces.arg(0, &x);
-	_rocket_aero_forces.arg(1, &u);
-	_rocket_aero_forces.arg(2, &p);
-	_rocket_aero_forces.res(0, &FA_b);
-	_rocket_aero_forces.eval();
-	
-	int i;
-	for (i=0;i<3;i++) {
-	std::cout << "FA_b" << FA_b[i] << std::endl;
-	}	
-}
-  _rocket_aero_moments(rocket_aero_moment())
-{
-	std::cout << "hello rocket plugin for aero momento" << std::endl;
-	double x;
-	double u;
-	double p;
-	double MA_b;
-	_rocket_aero_forces.arg(0, &x);
-	_rocket_aero_forces.arg(1, &u);
-	_rocket_aero_forces.arg(2, &p);
-	_rocket_aero_forces.res(0, &MA_b);
-	_rocket_aero_forces.eval();
-	
-	int i;
-	for (i=0;i<3;i++) {
-	std::cout << "MA_b" << MA_b[i] << std::endl;
-	}
-}
-  _rocket_prop_forces(rocket_prop_forces())
-{
-	std::cout << "hello rocket plugin for Prop Force" << std::endl;
-	double x;
-	double u;
-	double p;
-	double FP_b;
-	_rocket_aero_forces.arg(0, &x);
-	_rocket_aero_forces.arg(1, &u);
-	_rocket_aero_forces.arg(2, &p);
-	_rocket_aero_forces.res(0, &FP_b);
-	_rocket_aero_forces.eval();
-	
-	int i;
-	for (i=0;i<3;i++) {
-	std::cout << "FP_b" << FP_b[i] << std::endl;
-	}
-}
-  _rocket_prop_moments(rocket_prop_moments())
-{
-	std::cout << "hello rocket plugin for Prop Moment" << std::endl;
-	double x;
-	double u;
-	double p;
-	double MP_b;
-	_rocket_aero_forces.arg(0, &x);
-	_rocket_aero_forces.arg(1, &u);
-	_rocket_aero_forces.arg(2, &p);
-	_rocket_aero_forces.res(0, &MP_b);
-	_rocket_aero_forces.eval();
-	
-	int i;
-	for (i=0;i<3;i++) {
-	std::cout << "MP_b" << MP_b[i] << std::endl;
-	}
-}
-// END TODO
 
 /////////////////////////////////////////////////
 RocketPlugin::~RocketPlugin()

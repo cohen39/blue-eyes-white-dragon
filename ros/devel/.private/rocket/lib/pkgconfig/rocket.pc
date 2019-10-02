@@ -1,0 +1,8 @@
+prefix=/home/zp/aae497/blue-eyes-white-dragon/ros/devel/.private/rocket
+
+Name: rocket
+Description: Description of rocket
+Version: 0.0.0
+Cflags: 
+Libs: -L/home/zp/aae497/blue-eyes-white-dragon/ros/devel/.private/rocket/lib 
+Requires: 

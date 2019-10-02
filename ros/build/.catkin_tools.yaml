@@ -1,0 +1,6 @@
+devel_space: /home/zp/aae497/blue-eyes-white-dragon/ros/devel
+install: false
+install_space: /home/zp/aae497/blue-eyes-white-dragon/ros/install
+profile: default
+source_space: /home/zp/aae497/blue-eyes-white-dragon/ros/src
+workspace: /home/zp/aae497/blue-eyes-white-dragon/ros

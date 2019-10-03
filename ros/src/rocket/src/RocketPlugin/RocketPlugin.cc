@@ -149,17 +149,11 @@ void RocketPlugin::Update(const common::UpdateInfo &/*_info*/)
   
     float ve = this->p[6]; // exit velocity, m/s, guess
     
-    // auto pose_world_Cog =  this->body->WorldCoGPose(); // pose in world link frame, maybe
-    // auto pos_cog = pose_world_Cog.Pos(); // x,y,z
-    // auto rot_cog = pose_world_Cog.Rot(); // w x y z, quaternions.
     // Get current states from gazebo
     auto pose_world_inertia = this->body->WorldInertialPose(); //pose in world inertia frame ????
-    auto pos_ine = pose_world_inertia.Pos(); // x,y,z
-    auto rot_ine = pose_world_inertia.Rot(); // w x y z, quaternions.
+    auto pos_ine = pose_world_inertia.Pos(); // [x,y,z], use [] to access elements
+    auto rot_ine = pose_world_inertia.Rot(); // [w x y z], quaternions. use .qw .qx .qy .qz to access.
 
-    // std::cout<<"\nPos comparison"<<std::endl;
-    // std::cout<<pos_rel<<"\n"<<pos_ine<<std::endl;
-    
     auto omega_ine = this->body->WorldAngularVel(); // inertial angular velocity
     auto vel_ine = this->body->WorldLinearVel(); // inertial linaer velocity
     

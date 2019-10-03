@@ -29,6 +29,7 @@ extern "C" {
 #define casadi_f1 CASADI_PREFIX(f1)
 #define casadi_f2 CASADI_PREFIX(f2)
 #define casadi_f3 CASADI_PREFIX(f3)
+#define casadi_f4 CASADI_PREFIX(f4)
 #define casadi_s0 CASADI_PREFIX(s0)
 #define casadi_s1 CASADI_PREFIX(s1)
 #define casadi_s2 CASADI_PREFIX(s2)
@@ -809,6 +810,119 @@ CASADI_SYMBOL_EXPORT casadi_functions* rocket_prop_moments_functions(void) {
     rocket_prop_moments_sparsity_out,
     rocket_prop_moments_work,
     rocket_prop_moments
+  };
+  return &fun;
+}
+/* quat2mrp:(q[4])->(r[4]) */
+static int casadi_f4(const casadi_real** arg, casadi_real** res, casadi_int* iw, casadi_real* w, void* mem) {
+  casadi_real a0, a1, a2, a3, a4, a5, a6;
+  a0=1.;
+  a1=arg[0] ? arg[0][1] : 0;
+  a2=arg[0] ? arg[0][0] : 0;
+  a2=(a0+a2);
+  a1=(a1/a2);
+  a3=casadi_sq(a1);
+  a4=arg[0] ? arg[0][2] : 0;
+  a4=(a4/a2);
+  a5=casadi_sq(a4);
+  a3=(a3+a5);
+  a5=arg[0] ? arg[0][3] : 0;
+  a5=(a5/a2);
+  a2=casadi_sq(a5);
+  a3=(a3+a2);
+  a3=sqrt(a3);
+  a0=(a0<a3);
+  a3=casadi_sq(a1);
+  a2=casadi_sq(a4);
+  a3=(a3+a2);
+  a2=casadi_sq(a5);
+  a3=(a3+a2);
+  a2=(a1/a3);
+  a2=(-a2);
+  a2=(a0?a2:0);
+  a6=(!a0);
+  a1=(a6?a1:0);
+  a2=(a2+a1);
+  if (res[0]!=0) res[0][0]=a2;
+  a2=(a4/a3);
+  a2=(-a2);
+  a2=(a0?a2:0);
+  a4=(a6?a4:0);
+  a2=(a2+a4);
+  if (res[0]!=0) res[0][1]=a2;
+  a3=(a5/a3);
+  a3=(-a3);
+  a0=(a0?a3:0);
+  a6=(a6?a5:0);
+  a0=(a0+a6);
+  if (res[0]!=0) res[0][2]=a0;
+  a0=0.;
+  if (res[0]!=0) res[0][3]=a0;
+  return 0;
+}
+
+CASADI_SYMBOL_EXPORT int quat2mrp(const casadi_real** arg, casadi_real** res, casadi_int* iw, casadi_real* w, void* mem){
+  return casadi_f4(arg, res, iw, w, mem);
+}
+
+CASADI_SYMBOL_EXPORT void quat2mrp_incref(void) {
+}
+
+CASADI_SYMBOL_EXPORT void quat2mrp_decref(void) {
+}
+
+CASADI_SYMBOL_EXPORT casadi_int quat2mrp_n_in(void) { return 1;}
+
+CASADI_SYMBOL_EXPORT casadi_int quat2mrp_n_out(void) { return 1;}
+
+CASADI_SYMBOL_EXPORT const char* quat2mrp_name_in(casadi_int i){
+  switch (i) {
+    case 0: return "q";
+    default: return 0;
+  }
+}
+
+CASADI_SYMBOL_EXPORT const char* quat2mrp_name_out(casadi_int i){
+  switch (i) {
+    case 0: return "r";
+    default: return 0;
+  }
+}
+
+CASADI_SYMBOL_EXPORT const casadi_int* quat2mrp_sparsity_in(casadi_int i) {
+  switch (i) {
+    case 0: return casadi_s1;
+    default: return 0;
+  }
+}
+
+CASADI_SYMBOL_EXPORT const casadi_int* quat2mrp_sparsity_out(casadi_int i) {
+  switch (i) {
+    case 0: return casadi_s1;
+    default: return 0;
+  }
+}
+
+CASADI_SYMBOL_EXPORT int quat2mrp_work(casadi_int *sz_arg, casadi_int* sz_res, casadi_int *sz_iw, casadi_int *sz_w) {
+  if (sz_arg) *sz_arg = 1;
+  if (sz_res) *sz_res = 1;
+  if (sz_iw) *sz_iw = 0;
+  if (sz_w) *sz_w = 0;
+  return 0;
+}
+
+CASADI_SYMBOL_EXPORT casadi_functions* quat2mrp_functions(void) {
+  static casadi_functions fun = {
+    quat2mrp_incref,
+    quat2mrp_decref,
+    quat2mrp_n_in,
+    quat2mrp_n_out,
+    quat2mrp_name_in,
+    quat2mrp_name_out,
+    quat2mrp_sparsity_in,
+    quat2mrp_sparsity_out,
+    quat2mrp_work,
+    quat2mrp
   };
   return &fun;
 }

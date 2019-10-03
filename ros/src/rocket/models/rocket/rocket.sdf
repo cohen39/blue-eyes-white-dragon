@@ -374,6 +374,7 @@
 
     <plugin name="rocket_plugin" filename="libRocketPlugin.so">
       <motor>rocket_motor</motor>
+      <body>body</body>
     </plugin>
 
     <plugin name="p3d" filename="libgazebo_ros_p3d.so">

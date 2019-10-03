@@ -57,6 +57,17 @@ const casadi_int* rocket_prop_moments_sparsity_in(casadi_int i);
 const casadi_int* rocket_prop_moments_sparsity_out(casadi_int i);
 int rocket_prop_moments_work(casadi_int *sz_arg, casadi_int* sz_res, casadi_int *sz_iw, casadi_int *sz_w);
 casadi_functions* rocket_prop_moments_functions(void);
+int quat2mrp(const casadi_real** arg, casadi_real** res, casadi_int* iw, casadi_real* w, void* mem);
+void quat2mrp_incref(void);
+void quat2mrp_decref(void);
+casadi_int quat2mrp_n_out(void);
+casadi_int quat2mrp_n_in(void);
+const char* quat2mrp_name_in(casadi_int i);
+const char* quat2mrp_name_out(casadi_int i);
+const casadi_int* quat2mrp_sparsity_in(casadi_int i);
+const casadi_int* quat2mrp_sparsity_out(casadi_int i);
+int quat2mrp_work(casadi_int *sz_arg, casadi_int* sz_res, casadi_int *sz_iw, casadi_int *sz_w);
+casadi_functions* quat2mrp_functions(void);
 #ifdef __cplusplus
 } /* extern "C" */
 #endif

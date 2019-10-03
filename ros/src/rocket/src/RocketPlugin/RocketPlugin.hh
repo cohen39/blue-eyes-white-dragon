@@ -31,7 +31,7 @@
 #include <gazebo/transport/TransportTypes.hh>
 #include "rocket.pb.h"
 #include "casadi/CasadiFunc.hpp"
-#include "casadi_gen.h"
+// #include "casadi_gen.h"
 #include "casadi_gen_rocket.h"
 
 namespace gazebo
@@ -113,6 +113,7 @@ namespace gazebo
 
     /// \brief Motor Link
     private: physics::LinkPtr motor;
+    private: physics::LinkPtr body;
 
     /// \brief keep track of controller update sim-time.
     private: gazebo::common::Time lastUpdateTime;
@@ -129,12 +130,34 @@ namespace gazebo
     /// \brief Ignition Publisher.
     private: ignition::transport::Node::Publisher statePubIgn;
 
-	/// \brief Our casadi function
-    private: CasadiFunc _double_this;
-    private: CasadiFunc _rocket_aero_forces;
-    private: CasadiFunc _rocket_aero_moments;
-    private: CasadiFunc _rocket_prop_forces;
-    private: CasadiFunc _rocket_prop_moments;
+    /// \brief Our casadi function
+      // private: CasadiFunc _double_this;
+      private: CasadiFunc _rocket_aero_forces;
+      private: CasadiFunc _rocket_aero_moments;
+      private: CasadiFunc _rocket_prop_forces;
+      private: CasadiFunc _rocket_prop_moments;
+      private: CasadiFunc _quat2mrp; //
+      
+    /// Forces and Moments
+      private: double FA_b[3]={0}, FP_b[3]={0}, MA_b[3]={0}, MP_b[3]={0}; 
+    /// Parameters of the rocket
+      private: double p[15]= {
+        9.81,         //gravitational constant
+        1,            //Jxx
+        1,            //Jyy
+        1,            //Jzz
+        0.1,          //Jxz
+        350,          //Ve
+        1.0,          //l_fin
+        2*3.14159265, //C_L_alpha
+        0,            //C_L_0
+        0.01,         //C_D_0
+        0.01,         //K
+        0.05,         //sFin
+        1.225,        //rho
+        0.2,          //m_empty
+        1.0           //l_motor
+      };
   };
 }
 #endif

@@ -56,11 +56,10 @@ class RocketController:
         msg.force.x = 0
         msg.force.y = 0
         msg.force.z = 0
-        msg.torque.x = 10
+        msg.torque.x = 0
         msg.torque.y = 0
         msg.torque.z = 0
         self.pub_fin1.publish(msg)
-
 
 if __name__ == "__main__":
     RocketController()

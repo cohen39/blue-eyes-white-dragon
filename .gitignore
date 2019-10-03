@@ -1,0 +1,6 @@
+#C++ extension
+*.so
+
+build/
+devel/
+log/

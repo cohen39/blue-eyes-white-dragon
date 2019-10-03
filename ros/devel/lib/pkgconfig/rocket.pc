@@ -1,1 +1,0 @@
-/home/zp/aae497/blue-eyes-white-dragon/ros/devel/.private/rocket/lib/pkgconfig/rocket.pc

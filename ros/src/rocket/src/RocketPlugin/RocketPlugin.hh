@@ -31,7 +31,7 @@
 #include <gazebo/transport/TransportTypes.hh>
 #include "rocket.pb.h"
 #include "casadi/CasadiFunc.hpp"
-#include "casadi_gen.h"
+// #include "casadi_gen.h"
 #include "casadi_gen_rocket.h"
 
 namespace gazebo
@@ -131,12 +131,13 @@ namespace gazebo
     private: ignition::transport::Node::Publisher statePubIgn;
 
     /// \brief Our casadi function
-      private: CasadiFunc _double_this;
-      private: CasadiFunc _rocket_aero_forces; // = rocket_aero_forces_functions();
-      private: CasadiFunc _rocket_aero_moments; //= rocket_aero_moments_functions();
-      private: CasadiFunc _rocket_prop_forces; //= rocket_prop_forces_functions();
-      private: CasadiFunc _rocket_prop_moments; //= rocket_prop_moments_functions();
-
+      // private: CasadiFunc _double_this;
+      private: CasadiFunc _rocket_aero_forces;
+      private: CasadiFunc _rocket_aero_moments;
+      private: CasadiFunc _rocket_prop_forces;
+      private: CasadiFunc _rocket_prop_moments;
+      private: CasadiFunc _quat2mrp; //
+      
     /// Forces and Moments
       private: double FA_b[3]={0}, FP_b[3]={0}, MA_b[3]={0}, MP_b[3]={0}; 
     /// Parameters of the rocket

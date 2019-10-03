@@ -33,11 +33,12 @@ GZ_REGISTER_MODEL_PLUGIN(RocketPlugin)
 ////////////////////////////////////////////////////////////////////////////////
 RocketPlugin::RocketPlugin()
   :
-	_double_this(double_this_functions()),
+	// _double_this(double_this_functions()),
   _rocket_aero_forces(rocket_aero_forces_functions()),
   _rocket_aero_moments(rocket_aero_moments_functions()),
   _rocket_prop_forces(rocket_prop_forces_functions()),
-  _rocket_prop_moments(rocket_prop_moments_functions())
+  _rocket_prop_moments(rocket_prop_moments_functions()),
+  _quat2mrp(quat2mrp_functions())
 {
   _rocket_aero_forces.arg (2,p); //Set rocket constant parameters for each eom
   _rocket_aero_moments.arg(2,p); //Set rocket constant parameters for each eom
@@ -140,26 +141,37 @@ void RocketPlugin::Update(const common::UpdateInfo &/*_info*/)
     double dt = (curTime - this->lastUpdateTime).Double();
 
     // ref to definition of Model.hh to get parameters
-    auto inertial = this->motor->GetInertial();
-    float m_fuel = inertial->Mass();
+    auto motor_inertial = this->motor->GetInertial();
+    float m_fuel = motor_inertial->Mass();
     float m_dot = 0.1;
     float m_empty = 0.0;
-    m_fuel = m_fuel - m_dot*dt;
-    // float P0 = 101325.0; // freestream pressure
-    // float Pe = 1.0*P0; // disable effect for now
-
-    if (m_fuel < m_empty) {
-      m_fuel = m_empty;
-      m_dot = 0;
-    }
-    // Pe = P0;
-    // }
-    // float r = 0.1; // nozzle radius
-    // float A = M_PI*r*r; // nozzle exit area
+    m_fuel = m_fuel - m_dot*dt; // x[13]
+  
     float ve = this->p[6]; // exit velocity, m/s, guess
+    
+    // auto pose_world_Cog =  this->body->WorldCoGPose(); // pose in world link frame, maybe
+    // auto pos_cog = pose_world_Cog.Pos(); // x,y,z
+    // auto rot_cog = pose_world_Cog.Rot(); // w x y z, quaternions.
+    // Get current states from gazebo
+    auto pose_world_inertia = this->body->WorldInertialPose(); //pose in world inertia frame ????
+    auto pos_ine = pose_world_inertia.Pos(); // x,y,z
+    auto rot_ine = pose_world_inertia.Rot(); // w x y z, quaternions.
+
+    // std::cout<<"\nPos comparison"<<std::endl;
+    // std::cout<<pos_rel<<"\n"<<pos_ine<<std::endl;
+    
+    auto omega_ine = this->body->WorldAngularVel(); // inertial angular velocity
+    auto vel_ine = this->body->WorldLinearVel(); // inertial linaer velocity
+    
+    // TODO: Convert inertial frame values to body frame.
+
+    // TODO: Set states x and inputs u
+    
+    FP_b[1] = 1;
+    
     this->motor->AddRelativeForce(ignition::math::Vector3d(FP_b[0], FP_b[1],FP_b[2]));
-    inertial->SetMass(m_fuel);
-    inertial->SetInertiaMatrix(0, 0, 0, 0, 0, 0); // treat as point mass
+    motor_inertial->SetMass(m_fuel);
+    motor_inertial->SetInertiaMatrix(0, 0, 0, 0, 0, 0); // treat as point mass
     this->lastUpdateTime = curTime;
   }
 }

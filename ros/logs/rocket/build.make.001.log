@@ -1,5 +1,0 @@
-[ 42%] Built target rocket_msgs
-[35m[1mScanning dependencies of target RocketPlugin[0m
-[ 57%] [32mBuilding C object CMakeFiles/RocketPlugin.dir/src/RocketPlugin/casadi_gen_rocket.c.o[0m
-[ 71%] [32m[1mLinking CXX shared library /home/zp/aae497/blue-eyes-white-dragon/ros/devel/.private/rocket/lib/libRocketPlugin.so[0m
-[100%] Built target RocketPlugin

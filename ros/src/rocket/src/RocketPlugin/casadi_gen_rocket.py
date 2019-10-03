@@ -5,7 +5,7 @@ sys.path.insert(0, '../../../../../python/pyecca')
 from pyecca.lie import so3
 from pyecca.util import rk4
 
-def rockt_eom(jit=True):
+def rockt_eval_func(jit=True):
     x = ca.SX.sym('x', 14)
     u = ca.SX.sym('u', 4)
     p = ca.SX.sym('p', 15)
@@ -116,12 +116,24 @@ def rockt_eom(jit=True):
         'rocket_prop_forces',[x,u,p],[FP_b],['x','u','p'],['FP_b'])
     rocket_prop_moment = ca.Function(
         'rocket_prop_moments',[x,u,p],[MP_b],['x','u','p'],['MP_b'])
-    
-    gen = ca.CodeGenerator('casadi_gen_rocket.c', {'main': False, 'mex': False, 'with_header': True, 'with_mem': True})
-    gen.add(rocket_aero_forces)
-    gen.add(rocket_aero_moments)
-    gen.add(rocket_prop_forces)
-    gen.add(rocket_prop_moment)
-    gen.generate()
+    rocket_functions = [rocket_aero_forces, rocket_aero_moments,
+            rocket_prop_forces, rocket_prop_moment]
+    return rocket_functions
 
-rockt_eom()
+
+def casadi_magic_MRP(jit=True):
+    q = ca.SX.sym('q', 4)
+    r = so3.Mrp.from_quat(q)
+
+    quat2mrp = ca.Function('quat2mrp',[q],[r],['q'],['r'])
+
+    return quat2mrp
+
+rk_func = rockt_eval_func()
+rk_func.append(casadi_magic_MRP())
+
+gen = ca.CodeGenerator('casadi_gen_rocket.c', {'main': False, 'mex': False, 'with_header': True, 'with_mem': True})
+for i in rk_func:
+    gen.add(i)
+gen.generate()
+

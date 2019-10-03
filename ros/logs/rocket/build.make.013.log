@@ -1,0 +1,28 @@
+[ 42%] Built target rocket_msgs
+[35m[1mScanning dependencies of target RocketPlugin[0m
+[ 57%] [32mBuilding CXX object CMakeFiles/RocketPlugin.dir/src/RocketPlugin/RocketPlugin.cc.o[0m
+[01m[K/home/zp/aae497/blue-eyes-white-dragon/ros/src/rocket/src/RocketPlugin/RocketPlugin.cc:[m[K In member function ‘[01m[Kvoid gazebo::RocketPlugin::Update(const gazebo::common::UpdateInfo&)[m[K’:
+[01m[K/home/zp/aae497/blue-eyes-white-dragon/ros/src/rocket/src/RocketPlugin/RocketPlugin.cc:172:28:[m[K [01;31m[Kerror: [m[K‘[01m[Kclass ignition::math::v4::Quaternion<double>[m[K’ has no member named ‘[01m[Kw[m[K’
+     double q[4] = {rot_ine.[01;31m[Kw[m[K(), rot_ine.x(), rot_ine.y(), rot_ine.z()};
+                            [01;31m[K^[m[K
+[01m[K/home/zp/aae497/blue-eyes-white-dragon/ros/src/rocket/src/RocketPlugin/RocketPlugin.cc:172:41:[m[K [01;31m[Kerror: [m[K‘[01m[Kclass ignition::math::v4::Quaternion<double>[m[K’ has no member named ‘[01m[Kx[m[K’
+     double q[4] = {rot_ine.w(), rot_ine.[01;31m[Kx[m[K(), rot_ine.y(), rot_ine.z()};
+                                         [01;31m[K^[m[K
+[01m[K/home/zp/aae497/blue-eyes-white-dragon/ros/src/rocket/src/RocketPlugin/RocketPlugin.cc:172:54:[m[K [01;31m[Kerror: [m[K‘[01m[Kclass ignition::math::v4::Quaternion<double>[m[K’ has no member named ‘[01m[Ky[m[K’
+     double q[4] = {rot_ine.w(), rot_ine.x(), rot_ine.[01;31m[Ky[m[K(), rot_ine.z()};
+                                                      [01;31m[K^[m[K
+[01m[K/home/zp/aae497/blue-eyes-white-dragon/ros/src/rocket/src/RocketPlugin/RocketPlugin.cc:172:67:[m[K [01;31m[Kerror: [m[K‘[01m[Kclass ignition::math::v4::Quaternion<double>[m[K’ has no member named ‘[01m[Kz[m[K’
+     double q[4] = {rot_ine.w(), rot_ine.x(), rot_ine.y(), rot_ine.[01;31m[Kz[m[K()};
+                                                                   [01;31m[K^[m[K
+[01m[K/home/zp/aae497/blue-eyes-white-dragon/ros/src/rocket/src/RocketPlugin/RocketPlugin.cc:187:52:[m[K [01;31m[Kerror: [m[Kcannot convert ‘[01m[Kdouble*[m[K’ to ‘[01m[Kdouble[m[K’ in initialization
+     double x[13] = {omg_b, r_nb, v_b, pos_n, m_fuel[01;31m[K}[m[K;
+                                                    [01;31m[K^[m[K
+[01m[K/home/zp/aae497/blue-eyes-white-dragon/ros/src/rocket/src/RocketPlugin/RocketPlugin.cc:187:52:[m[K [01;31m[Kerror: [m[Kcannot convert ‘[01m[Kdouble*[m[K’ to ‘[01m[Kdouble[m[K’ in initialization
+[01m[K/home/zp/aae497/blue-eyes-white-dragon/ros/src/rocket/src/RocketPlugin/RocketPlugin.cc:187:52:[m[K [01;31m[Kerror: [m[Kcannot convert ‘[01m[Kdouble*[m[K’ to ‘[01m[Kdouble[m[K’ in initialization
+[01m[K/home/zp/aae497/blue-eyes-white-dragon/ros/src/rocket/src/RocketPlugin/RocketPlugin.cc:187:52:[m[K [01;31m[Kerror: [m[Kcannot convert ‘[01m[Kdouble*[m[K’ to ‘[01m[Kdouble[m[K’ in initialization
+CMakeFiles/RocketPlugin.dir/build.make:62: recipe for target 'CMakeFiles/RocketPlugin.dir/src/RocketPlugin/RocketPlugin.cc.o' failed
+make[2]: *** [CMakeFiles/RocketPlugin.dir/src/RocketPlugin/RocketPlugin.cc.o] Error 1
+CMakeFiles/Makefile2:136: recipe for target 'CMakeFiles/RocketPlugin.dir/all' failed
+make[1]: *** [CMakeFiles/RocketPlugin.dir/all] Error 2
+Makefile:140: recipe for target 'all' failed
+make: *** [all] Error 2

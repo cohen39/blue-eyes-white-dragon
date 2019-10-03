@@ -1,0 +1,16 @@
+[01m[K/home/zp/aae497/blue-eyes-white-dragon/ros/src/rocket/src/RocketPlugin/RocketPlugin.cc:[m[K In member function ‘[01m[Kvoid gazebo::RocketPlugin::Update(const gazebo::common::UpdateInfo&)[m[K’:
+[01m[K/home/zp/aae497/blue-eyes-white-dragon/ros/src/rocket/src/RocketPlugin/RocketPlugin.cc:164:28:[m[K [01;31m[Kerror: [m[Kno matching function for call to ‘[01m[KCasadiFunc::arg(int, ignition::math::v4::Quaternion<double>&)[m[K’
+     _quat2dcm.arg(0,rot_ine[01;31m[K)[m[K;
+                            [01;31m[K^[m[K
+In file included from [01m[K/home/zp/aae497/blue-eyes-white-dragon/ros/src/rocket/src/RocketPlugin/RocketPlugin.hh:33:0[m[K,
+                 from [01m[K/home/zp/aae497/blue-eyes-white-dragon/ros/src/rocket/src/RocketPlugin/RocketPlugin.cc:26[m[K:
+[01m[K/home/zp/aae497/blue-eyes-white-dragon/ros/src/rocket/src/casadi/CasadiFunc.hpp:21:7:[m[K [01;36m[Knote: [m[Kcandidate: void CasadiFunc::arg(int, const double*)
+  void [01;36m[Karg[m[K(int i, const casadi_real *v)
+       [01;36m[K^~~[m[K
+[01m[K/home/zp/aae497/blue-eyes-white-dragon/ros/src/rocket/src/casadi/CasadiFunc.hpp:21:7:[m[K [01;36m[Knote: [m[K  no known conversion for argument 2 from ‘[01m[Kignition::math::v4::Quaternion<double>[m[K’ to ‘[01m[Kconst double*[m[K’
+[01m[K/home/zp/aae497/blue-eyes-white-dragon/ros/src/rocket/src/RocketPlugin/RocketPlugin.cc:165:5:[m[K [01;31m[Kerror: [m[Kdeclaration of ‘[01m[Kauto dcm[m[K’ has no initializer
+     [01;31m[Kauto[m[K dcm;
+     [01;31m[K^~~~[m[K
+make[2]: *** [CMakeFiles/RocketPlugin.dir/src/RocketPlugin/RocketPlugin.cc.o] Error 1
+make[1]: *** [CMakeFiles/RocketPlugin.dir/all] Error 2
+make: *** [all] Error 2

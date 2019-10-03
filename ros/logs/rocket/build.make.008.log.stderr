@@ -1,0 +1,61 @@
+[01m[K/home/zp/aae497/blue-eyes-white-dragon/ros/src/rocket/src/RocketPlugin/RocketPlugin.cc:[m[K In member function ‘[01m[Kvoid gazebo::RocketPlugin::Update(const gazebo::common::UpdateInfo&)[m[K’:
+[01m[K/home/zp/aae497/blue-eyes-white-dragon/ros/src/rocket/src/RocketPlugin/RocketPlugin.cc:172:28:[m[K [01;31m[Kerror: [m[K‘[01m[Kdouble ignition::math::v4::Quaternion<double>::qw[m[K’ is private within this context
+     double q[4] = {rot_ine.[01;31m[Kqw[m[K, rot_ine.qx, rot_ine.qy, rot_ine.qz};
+                            [01;31m[K^~[m[K
+In file included from [01m[K/usr/include/ignition/math4/ignition/math/Filter.hh:22:0[m[K,
+                 from [01m[K/usr/include/ignition/math4/ignition/math.hh:26[m[K,
+                 from [01m[K/usr/include/sdformat-6.2/sdf/Param.hh:41[m[K,
+                 from [01m[K/usr/include/sdformat-6.2/sdf/Element.hh:25[m[K,
+                 from [01m[K/usr/include/sdformat-6.2/sdf/sdf.hh:4[m[K,
+                 from [01m[K/home/zp/aae497/blue-eyes-white-dragon/ros/src/rocket/src/RocketPlugin/RocketPlugin.cc:20[m[K:
+[01m[K/usr/include/ignition/math4/ignition/math/Quaternion.hh:1063:18:[m[K [01;36m[Knote: [m[Kdeclared private here
+       private: T [01;36m[Kqw[m[K;
+                  [01;36m[K^~[m[K
+[01m[K/home/zp/aae497/blue-eyes-white-dragon/ros/src/rocket/src/RocketPlugin/RocketPlugin.cc:172:40:[m[K [01;31m[Kerror: [m[K‘[01m[Kdouble ignition::math::v4::Quaternion<double>::qx[m[K’ is private within this context
+     double q[4] = {rot_ine.qw, rot_ine.[01;31m[Kqx[m[K, rot_ine.qy, rot_ine.qz};
+                                        [01;31m[K^~[m[K
+In file included from [01m[K/usr/include/ignition/math4/ignition/math/Filter.hh:22:0[m[K,
+                 from [01m[K/usr/include/ignition/math4/ignition/math.hh:26[m[K,
+                 from [01m[K/usr/include/sdformat-6.2/sdf/Param.hh:41[m[K,
+                 from [01m[K/usr/include/sdformat-6.2/sdf/Element.hh:25[m[K,
+                 from [01m[K/usr/include/sdformat-6.2/sdf/sdf.hh:4[m[K,
+                 from [01m[K/home/zp/aae497/blue-eyes-white-dragon/ros/src/rocket/src/RocketPlugin/RocketPlugin.cc:20[m[K:
+[01m[K/usr/include/ignition/math4/ignition/math/Quaternion.hh:1066:18:[m[K [01;36m[Knote: [m[Kdeclared private here
+       private: T [01;36m[Kqx[m[K;
+                  [01;36m[K^~[m[K
+[01m[K/home/zp/aae497/blue-eyes-white-dragon/ros/src/rocket/src/RocketPlugin/RocketPlugin.cc:172:52:[m[K [01;31m[Kerror: [m[K‘[01m[Kdouble ignition::math::v4::Quaternion<double>::qy[m[K’ is private within this context
+     double q[4] = {rot_ine.qw, rot_ine.qx, rot_ine.[01;31m[Kqy[m[K, rot_ine.qz};
+                                                    [01;31m[K^~[m[K
+In file included from [01m[K/usr/include/ignition/math4/ignition/math/Filter.hh:22:0[m[K,
+                 from [01m[K/usr/include/ignition/math4/ignition/math.hh:26[m[K,
+                 from [01m[K/usr/include/sdformat-6.2/sdf/Param.hh:41[m[K,
+                 from [01m[K/usr/include/sdformat-6.2/sdf/Element.hh:25[m[K,
+                 from [01m[K/usr/include/sdformat-6.2/sdf/sdf.hh:4[m[K,
+                 from [01m[K/home/zp/aae497/blue-eyes-white-dragon/ros/src/rocket/src/RocketPlugin/RocketPlugin.cc:20[m[K:
+[01m[K/usr/include/ignition/math4/ignition/math/Quaternion.hh:1069:18:[m[K [01;36m[Knote: [m[Kdeclared private here
+       private: T [01;36m[Kqy[m[K;
+                  [01;36m[K^~[m[K
+[01m[K/home/zp/aae497/blue-eyes-white-dragon/ros/src/rocket/src/RocketPlugin/RocketPlugin.cc:172:64:[m[K [01;31m[Kerror: [m[K‘[01m[Kdouble ignition::math::v4::Quaternion<double>::qz[m[K’ is private within this context
+     double q[4] = {rot_ine.qw, rot_ine.qx, rot_ine.qy, rot_ine.[01;31m[Kqz[m[K};
+                                                                [01;31m[K^~[m[K
+In file included from [01m[K/usr/include/ignition/math4/ignition/math/Filter.hh:22:0[m[K,
+                 from [01m[K/usr/include/ignition/math4/ignition/math.hh:26[m[K,
+                 from [01m[K/usr/include/sdformat-6.2/sdf/Param.hh:41[m[K,
+                 from [01m[K/usr/include/sdformat-6.2/sdf/Element.hh:25[m[K,
+                 from [01m[K/usr/include/sdformat-6.2/sdf/sdf.hh:4[m[K,
+                 from [01m[K/home/zp/aae497/blue-eyes-white-dragon/ros/src/rocket/src/RocketPlugin/RocketPlugin.cc:20[m[K:
+[01m[K/usr/include/ignition/math4/ignition/math/Quaternion.hh:1072:18:[m[K [01;36m[Knote: [m[Kdeclared private here
+       private: T [01;36m[Kqz[m[K;
+                  [01;36m[K^~[m[K
+[01m[K/home/zp/aae497/blue-eyes-white-dragon/ros/src/rocket/src/RocketPlugin/RocketPlugin.cc:177:5:[m[K [01;31m[Kerror: [m[Kexpected ‘[01m[K;[m[K’ before ‘[01m[K_tf_linvel[m[K’
+     [01;31m[K_tf_linvel[m[K.arg(0,v_ine);
+     [01;31m[K^~~~~~~~~~[m[K
+[01m[K/home/zp/aae497/blue-eyes-white-dragon/ros/src/rocket/src/RocketPlugin/RocketPlugin.cc:187:52:[m[K [01;31m[Kerror: [m[Kcannot convert ‘[01m[Kdouble*[m[K’ to ‘[01m[Kdouble[m[K’ in initialization
+     double x[13] = {omg_b, r_nb, v_b, pos_n, m_fuel[01;31m[K}[m[K;
+                                                    [01;31m[K^[m[K
+[01m[K/home/zp/aae497/blue-eyes-white-dragon/ros/src/rocket/src/RocketPlugin/RocketPlugin.cc:187:52:[m[K [01;31m[Kerror: [m[Kcannot convert ‘[01m[Kdouble*[m[K’ to ‘[01m[Kdouble[m[K’ in initialization
+[01m[K/home/zp/aae497/blue-eyes-white-dragon/ros/src/rocket/src/RocketPlugin/RocketPlugin.cc:187:52:[m[K [01;31m[Kerror: [m[Kcannot convert ‘[01m[Kdouble*[m[K’ to ‘[01m[Kdouble[m[K’ in initialization
+[01m[K/home/zp/aae497/blue-eyes-white-dragon/ros/src/rocket/src/RocketPlugin/RocketPlugin.cc:187:52:[m[K [01;31m[Kerror: [m[Kcannot convert ‘[01m[Kdouble*[m[K’ to ‘[01m[Kdouble[m[K’ in initialization
+make[2]: *** [CMakeFiles/RocketPlugin.dir/src/RocketPlugin/RocketPlugin.cc.o] Error 1
+make[1]: *** [CMakeFiles/RocketPlugin.dir/all] Error 2
+make: *** [all] Error 2

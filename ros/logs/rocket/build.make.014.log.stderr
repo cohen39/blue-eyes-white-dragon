@@ -1,0 +1,10 @@
+[01m[K/home/zp/aae497/blue-eyes-white-dragon/ros/src/rocket/src/RocketPlugin/RocketPlugin.cc:[m[K In member function ‘[01m[Kvoid gazebo::RocketPlugin::Update(const gazebo::common::UpdateInfo&)[m[K’:
+[01m[K/home/zp/aae497/blue-eyes-white-dragon/ros/src/rocket/src/RocketPlugin/RocketPlugin.cc:187:52:[m[K [01;31m[Kerror: [m[Kcannot convert ‘[01m[Kdouble*[m[K’ to ‘[01m[Kdouble[m[K’ in initialization
+     double x[13] = {omg_b, r_nb, v_b, pos_n, m_fuel[01;31m[K}[m[K;
+                                                    [01;31m[K^[m[K
+[01m[K/home/zp/aae497/blue-eyes-white-dragon/ros/src/rocket/src/RocketPlugin/RocketPlugin.cc:187:52:[m[K [01;31m[Kerror: [m[Kcannot convert ‘[01m[Kdouble*[m[K’ to ‘[01m[Kdouble[m[K’ in initialization
+[01m[K/home/zp/aae497/blue-eyes-white-dragon/ros/src/rocket/src/RocketPlugin/RocketPlugin.cc:187:52:[m[K [01;31m[Kerror: [m[Kcannot convert ‘[01m[Kdouble*[m[K’ to ‘[01m[Kdouble[m[K’ in initialization
+[01m[K/home/zp/aae497/blue-eyes-white-dragon/ros/src/rocket/src/RocketPlugin/RocketPlugin.cc:187:52:[m[K [01;31m[Kerror: [m[Kcannot convert ‘[01m[Kdouble*[m[K’ to ‘[01m[Kdouble[m[K’ in initialization
+make[2]: *** [CMakeFiles/RocketPlugin.dir/src/RocketPlugin/RocketPlugin.cc.o] Error 1
+make[1]: *** [CMakeFiles/RocketPlugin.dir/all] Error 2
+make: *** [all] Error 2

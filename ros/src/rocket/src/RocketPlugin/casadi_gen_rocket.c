@@ -30,10 +30,14 @@ extern "C" {
 #define casadi_f2 CASADI_PREFIX(f2)
 #define casadi_f3 CASADI_PREFIX(f3)
 #define casadi_f4 CASADI_PREFIX(f4)
+#define casadi_f5 CASADI_PREFIX(f5)
+#define casadi_f6 CASADI_PREFIX(f6)
+#define casadi_f7 CASADI_PREFIX(f7)
 #define casadi_s0 CASADI_PREFIX(s0)
 #define casadi_s1 CASADI_PREFIX(s1)
 #define casadi_s2 CASADI_PREFIX(s2)
 #define casadi_s3 CASADI_PREFIX(s3)
+#define casadi_s4 CASADI_PREFIX(s4)
 #define casadi_sq CASADI_PREFIX(sq)
 
 /* Symbol visibility in DLLs */
@@ -55,6 +59,7 @@ static const casadi_int casadi_s0[18] = {14, 1, 0, 14, 0, 1, 2, 3, 4, 5, 6, 7, 8
 static const casadi_int casadi_s1[8] = {4, 1, 0, 4, 0, 1, 2, 3};
 static const casadi_int casadi_s2[19] = {15, 1, 0, 15, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14};
 static const casadi_int casadi_s3[7] = {3, 1, 0, 3, 0, 1, 2};
+static const casadi_int casadi_s4[15] = {3, 3, 0, 3, 6, 9, 0, 1, 2, 0, 1, 2, 0, 1, 2};
 
 casadi_real casadi_sq(casadi_real x) { return x*x;}
 
@@ -813,7 +818,7 @@ CASADI_SYMBOL_EXPORT casadi_functions* rocket_prop_moments_functions(void) {
   };
   return &fun;
 }
-/* quat2mrp:(q[4])->(r[4]) */
+/* quat2mrp:(q[4])->(mrp[4]) */
 static int casadi_f4(const casadi_real** arg, casadi_real** res, casadi_int* iw, casadi_real* w, void* mem) {
   casadi_real a0, a1, a2, a3, a4, a5, a6;
   a0=1.;
@@ -884,7 +889,7 @@ CASADI_SYMBOL_EXPORT const char* quat2mrp_name_in(casadi_int i){
 
 CASADI_SYMBOL_EXPORT const char* quat2mrp_name_out(casadi_int i){
   switch (i) {
-    case 0: return "r";
+    case 0: return "mrp";
     default: return 0;
   }
 }
@@ -923,6 +928,382 @@ CASADI_SYMBOL_EXPORT casadi_functions* quat2mrp_functions(void) {
     quat2mrp_sparsity_out,
     quat2mrp_work,
     quat2mrp
+  };
+  return &fun;
+}
+/* quat2dcm:(q[4])->(dcm[3x3]) */
+static int casadi_f5(const casadi_real** arg, casadi_real** res, casadi_int* iw, casadi_real* w, void* mem) {
+  casadi_real a0, a1, a10, a11, a12, a13, a2, a3, a4, a5, a6, a7, a8, a9;
+  a0=arg[0] ? arg[0][0] : 0;
+  a1=casadi_sq(a0);
+  a2=arg[0] ? arg[0][1] : 0;
+  a3=casadi_sq(a2);
+  a4=(a1+a3);
+  a5=arg[0] ? arg[0][2] : 0;
+  a6=casadi_sq(a5);
+  a4=(a4-a6);
+  a7=arg[0] ? arg[0][3] : 0;
+  a8=casadi_sq(a7);
+  a4=(a4-a8);
+  if (res[0]!=0) res[0][0]=a4;
+  a4=2.;
+  a9=(a2*a5);
+  a10=(a0*a7);
+  a11=(a9+a10);
+  a11=(a4*a11);
+  if (res[0]!=0) res[0][1]=a11;
+  a11=(a2*a7);
+  a12=(a0*a5);
+  a13=(a11-a12);
+  a13=(a4*a13);
+  if (res[0]!=0) res[0][2]=a13;
+  a9=(a9-a10);
+  a9=(a4*a9);
+  if (res[0]!=0) res[0][3]=a9;
+  a9=(a1+a6);
+  a9=(a9-a3);
+  a9=(a9-a8);
+  if (res[0]!=0) res[0][4]=a9;
+  a5=(a5*a7);
+  a0=(a0*a2);
+  a2=(a5+a0);
+  a2=(a4*a2);
+  if (res[0]!=0) res[0][5]=a2;
+  a11=(a11+a12);
+  a11=(a4*a11);
+  if (res[0]!=0) res[0][6]=a11;
+  a5=(a5-a0);
+  a4=(a4*a5);
+  if (res[0]!=0) res[0][7]=a4;
+  a1=(a1+a8);
+  a1=(a1-a3);
+  a1=(a1-a6);
+  if (res[0]!=0) res[0][8]=a1;
+  return 0;
+}
+
+CASADI_SYMBOL_EXPORT int quat2dcm(const casadi_real** arg, casadi_real** res, casadi_int* iw, casadi_real* w, void* mem){
+  return casadi_f5(arg, res, iw, w, mem);
+}
+
+CASADI_SYMBOL_EXPORT void quat2dcm_incref(void) {
+}
+
+CASADI_SYMBOL_EXPORT void quat2dcm_decref(void) {
+}
+
+CASADI_SYMBOL_EXPORT casadi_int quat2dcm_n_in(void) { return 1;}
+
+CASADI_SYMBOL_EXPORT casadi_int quat2dcm_n_out(void) { return 1;}
+
+CASADI_SYMBOL_EXPORT const char* quat2dcm_name_in(casadi_int i){
+  switch (i) {
+    case 0: return "q";
+    default: return 0;
+  }
+}
+
+CASADI_SYMBOL_EXPORT const char* quat2dcm_name_out(casadi_int i){
+  switch (i) {
+    case 0: return "dcm";
+    default: return 0;
+  }
+}
+
+CASADI_SYMBOL_EXPORT const casadi_int* quat2dcm_sparsity_in(casadi_int i) {
+  switch (i) {
+    case 0: return casadi_s1;
+    default: return 0;
+  }
+}
+
+CASADI_SYMBOL_EXPORT const casadi_int* quat2dcm_sparsity_out(casadi_int i) {
+  switch (i) {
+    case 0: return casadi_s4;
+    default: return 0;
+  }
+}
+
+CASADI_SYMBOL_EXPORT int quat2dcm_work(casadi_int *sz_arg, casadi_int* sz_res, casadi_int *sz_iw, casadi_int *sz_w) {
+  if (sz_arg) *sz_arg = 1;
+  if (sz_res) *sz_res = 1;
+  if (sz_iw) *sz_iw = 0;
+  if (sz_w) *sz_w = 0;
+  return 0;
+}
+
+CASADI_SYMBOL_EXPORT casadi_functions* quat2dcm_functions(void) {
+  static casadi_functions fun = {
+    quat2dcm_incref,
+    quat2dcm_decref,
+    quat2dcm_n_in,
+    quat2dcm_n_out,
+    quat2dcm_name_in,
+    quat2dcm_name_out,
+    quat2dcm_sparsity_in,
+    quat2dcm_sparsity_out,
+    quat2dcm_work,
+    quat2dcm
+  };
+  return &fun;
+}
+/* tf_linvel:(v_e[3],q[4])->(v_b[3]) */
+static int casadi_f6(const casadi_real** arg, casadi_real** res, casadi_int* iw, casadi_real* w, void* mem) {
+  casadi_real a0, a1, a10, a11, a12, a13, a14, a15, a16, a17, a2, a3, a4, a5, a6, a7, a8, a9;
+  a0=arg[1] ? arg[1][0] : 0;
+  a1=casadi_sq(a0);
+  a2=arg[1] ? arg[1][1] : 0;
+  a3=casadi_sq(a2);
+  a4=(a1+a3);
+  a5=arg[1] ? arg[1][2] : 0;
+  a6=casadi_sq(a5);
+  a4=(a4-a6);
+  a7=arg[1] ? arg[1][3] : 0;
+  a8=casadi_sq(a7);
+  a4=(a4-a8);
+  a9=arg[0] ? arg[0][0] : 0;
+  a4=(a4*a9);
+  a10=2.;
+  a11=(a2*a5);
+  a12=(a0*a7);
+  a13=(a11-a12);
+  a13=(a10*a13);
+  a14=arg[0] ? arg[0][1] : 0;
+  a13=(a13*a14);
+  a4=(a4+a13);
+  a13=(a2*a7);
+  a15=(a0*a5);
+  a16=(a13+a15);
+  a16=(a10*a16);
+  a17=arg[0] ? arg[0][2] : 0;
+  a16=(a16*a17);
+  a4=(a4+a16);
+  if (res[0]!=0) res[0][0]=a4;
+  a11=(a11+a12);
+  a11=(a10*a11);
+  a11=(a11*a9);
+  a12=(a1+a6);
+  a12=(a12-a3);
+  a12=(a12-a8);
+  a12=(a12*a14);
+  a11=(a11+a12);
+  a5=(a5*a7);
+  a0=(a0*a2);
+  a2=(a5-a0);
+  a2=(a10*a2);
+  a2=(a2*a17);
+  a11=(a11+a2);
+  if (res[0]!=0) res[0][1]=a11;
+  a13=(a13-a15);
+  a13=(a10*a13);
+  a13=(a13*a9);
+  a5=(a5+a0);
+  a10=(a10*a5);
+  a10=(a10*a14);
+  a13=(a13+a10);
+  a1=(a1+a8);
+  a1=(a1-a3);
+  a1=(a1-a6);
+  a1=(a1*a17);
+  a13=(a13+a1);
+  if (res[0]!=0) res[0][2]=a13;
+  return 0;
+}
+
+CASADI_SYMBOL_EXPORT int tf_linvel(const casadi_real** arg, casadi_real** res, casadi_int* iw, casadi_real* w, void* mem){
+  return casadi_f6(arg, res, iw, w, mem);
+}
+
+CASADI_SYMBOL_EXPORT void tf_linvel_incref(void) {
+}
+
+CASADI_SYMBOL_EXPORT void tf_linvel_decref(void) {
+}
+
+CASADI_SYMBOL_EXPORT casadi_int tf_linvel_n_in(void) { return 2;}
+
+CASADI_SYMBOL_EXPORT casadi_int tf_linvel_n_out(void) { return 1;}
+
+CASADI_SYMBOL_EXPORT const char* tf_linvel_name_in(casadi_int i){
+  switch (i) {
+    case 0: return "v_e";
+    case 1: return "q";
+    default: return 0;
+  }
+}
+
+CASADI_SYMBOL_EXPORT const char* tf_linvel_name_out(casadi_int i){
+  switch (i) {
+    case 0: return "v_b";
+    default: return 0;
+  }
+}
+
+CASADI_SYMBOL_EXPORT const casadi_int* tf_linvel_sparsity_in(casadi_int i) {
+  switch (i) {
+    case 0: return casadi_s3;
+    case 1: return casadi_s1;
+    default: return 0;
+  }
+}
+
+CASADI_SYMBOL_EXPORT const casadi_int* tf_linvel_sparsity_out(casadi_int i) {
+  switch (i) {
+    case 0: return casadi_s3;
+    default: return 0;
+  }
+}
+
+CASADI_SYMBOL_EXPORT int tf_linvel_work(casadi_int *sz_arg, casadi_int* sz_res, casadi_int *sz_iw, casadi_int *sz_w) {
+  if (sz_arg) *sz_arg = 2;
+  if (sz_res) *sz_res = 1;
+  if (sz_iw) *sz_iw = 0;
+  if (sz_w) *sz_w = 0;
+  return 0;
+}
+
+CASADI_SYMBOL_EXPORT casadi_functions* tf_linvel_functions(void) {
+  static casadi_functions fun = {
+    tf_linvel_incref,
+    tf_linvel_decref,
+    tf_linvel_n_in,
+    tf_linvel_n_out,
+    tf_linvel_name_in,
+    tf_linvel_name_out,
+    tf_linvel_sparsity_in,
+    tf_linvel_sparsity_out,
+    tf_linvel_work,
+    tf_linvel
+  };
+  return &fun;
+}
+/* tf_angvel:(omega_e[3],q[4])->(omega_b[3]) */
+static int casadi_f7(const casadi_real** arg, casadi_real** res, casadi_int* iw, casadi_real* w, void* mem) {
+  casadi_real a0, a1, a10, a11, a12, a13, a14, a15, a16, a17, a2, a3, a4, a5, a6, a7, a8, a9;
+  a0=arg[1] ? arg[1][0] : 0;
+  a1=casadi_sq(a0);
+  a2=arg[1] ? arg[1][1] : 0;
+  a3=casadi_sq(a2);
+  a4=(a1+a3);
+  a5=arg[1] ? arg[1][2] : 0;
+  a6=casadi_sq(a5);
+  a4=(a4-a6);
+  a7=arg[1] ? arg[1][3] : 0;
+  a8=casadi_sq(a7);
+  a4=(a4-a8);
+  a9=arg[0] ? arg[0][0] : 0;
+  a4=(a4*a9);
+  a10=2.;
+  a11=(a2*a5);
+  a12=(a0*a7);
+  a13=(a11-a12);
+  a13=(a10*a13);
+  a14=arg[0] ? arg[0][1] : 0;
+  a13=(a13*a14);
+  a4=(a4+a13);
+  a13=(a2*a7);
+  a15=(a0*a5);
+  a16=(a13+a15);
+  a16=(a10*a16);
+  a17=arg[0] ? arg[0][2] : 0;
+  a16=(a16*a17);
+  a4=(a4+a16);
+  if (res[0]!=0) res[0][0]=a4;
+  a11=(a11+a12);
+  a11=(a10*a11);
+  a11=(a11*a9);
+  a12=(a1+a6);
+  a12=(a12-a3);
+  a12=(a12-a8);
+  a12=(a12*a14);
+  a11=(a11+a12);
+  a5=(a5*a7);
+  a0=(a0*a2);
+  a2=(a5-a0);
+  a2=(a10*a2);
+  a2=(a2*a17);
+  a11=(a11+a2);
+  if (res[0]!=0) res[0][1]=a11;
+  a13=(a13-a15);
+  a13=(a10*a13);
+  a13=(a13*a9);
+  a5=(a5+a0);
+  a10=(a10*a5);
+  a10=(a10*a14);
+  a13=(a13+a10);
+  a1=(a1+a8);
+  a1=(a1-a3);
+  a1=(a1-a6);
+  a1=(a1*a17);
+  a13=(a13+a1);
+  if (res[0]!=0) res[0][2]=a13;
+  return 0;
+}
+
+CASADI_SYMBOL_EXPORT int tf_angvel(const casadi_real** arg, casadi_real** res, casadi_int* iw, casadi_real* w, void* mem){
+  return casadi_f7(arg, res, iw, w, mem);
+}
+
+CASADI_SYMBOL_EXPORT void tf_angvel_incref(void) {
+}
+
+CASADI_SYMBOL_EXPORT void tf_angvel_decref(void) {
+}
+
+CASADI_SYMBOL_EXPORT casadi_int tf_angvel_n_in(void) { return 2;}
+
+CASADI_SYMBOL_EXPORT casadi_int tf_angvel_n_out(void) { return 1;}
+
+CASADI_SYMBOL_EXPORT const char* tf_angvel_name_in(casadi_int i){
+  switch (i) {
+    case 0: return "omega_e";
+    case 1: return "q";
+    default: return 0;
+  }
+}
+
+CASADI_SYMBOL_EXPORT const char* tf_angvel_name_out(casadi_int i){
+  switch (i) {
+    case 0: return "omega_b";
+    default: return 0;
+  }
+}
+
+CASADI_SYMBOL_EXPORT const casadi_int* tf_angvel_sparsity_in(casadi_int i) {
+  switch (i) {
+    case 0: return casadi_s3;
+    case 1: return casadi_s1;
+    default: return 0;
+  }
+}
+
+CASADI_SYMBOL_EXPORT const casadi_int* tf_angvel_sparsity_out(casadi_int i) {
+  switch (i) {
+    case 0: return casadi_s3;
+    default: return 0;
+  }
+}
+
+CASADI_SYMBOL_EXPORT int tf_angvel_work(casadi_int *sz_arg, casadi_int* sz_res, casadi_int *sz_iw, casadi_int *sz_w) {
+  if (sz_arg) *sz_arg = 2;
+  if (sz_res) *sz_res = 1;
+  if (sz_iw) *sz_iw = 0;
+  if (sz_w) *sz_w = 0;
+  return 0;
+}
+
+CASADI_SYMBOL_EXPORT casadi_functions* tf_angvel_functions(void) {
+  static casadi_functions fun = {
+    tf_angvel_incref,
+    tf_angvel_decref,
+    tf_angvel_n_in,
+    tf_angvel_n_out,
+    tf_angvel_name_in,
+    tf_angvel_name_out,
+    tf_angvel_sparsity_in,
+    tf_angvel_sparsity_out,
+    tf_angvel_work,
+    tf_angvel
   };
   return &fun;
 }

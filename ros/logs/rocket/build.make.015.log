@@ -1,0 +1,17 @@
+[ 42%] Built target rocket_msgs
+[35m[1mScanning dependencies of target RocketPlugin[0m
+[ 57%] [32mBuilding CXX object CMakeFiles/RocketPlugin.dir/src/RocketPlugin/RocketPlugin.cc.o[0m
+[01m[K/home/zp/aae497/blue-eyes-white-dragon/ros/src/rocket/src/RocketPlugin/RocketPlugin.cc:[m[K In member function ‘[01m[Kvoid gazebo::RocketPlugin::Update(const gazebo::common::UpdateInfo&)[m[K’:
+[01m[K/home/zp/aae497/blue-eyes-white-dragon/ros/src/rocket/src/RocketPlugin/RocketPlugin.cc:188:15:[m[K [01;31m[Kerror: [m[K‘[01m[Komg[m[K’ was not declared in this scope
+     std::copy([01;31m[Komg[m[K,omg+3,x);
+               [01;31m[K^~~[m[K
+[01m[K/home/zp/aae497/blue-eyes-white-dragon/ros/src/rocket/src/RocketPlugin/RocketPlugin.cc:188:15:[m[K [01;36m[Knote: [m[Ksuggested alternative: ‘[01m[Komg_b[m[K’
+     std::copy([01;36m[Komg[m[K,omg+3,x);
+               [01;36m[K^~~[m[K
+               [32m[Komg_b[m[K
+CMakeFiles/RocketPlugin.dir/build.make:62: recipe for target 'CMakeFiles/RocketPlugin.dir/src/RocketPlugin/RocketPlugin.cc.o' failed
+make[2]: *** [CMakeFiles/RocketPlugin.dir/src/RocketPlugin/RocketPlugin.cc.o] Error 1
+CMakeFiles/Makefile2:136: recipe for target 'CMakeFiles/RocketPlugin.dir/all' failed
+make[1]: *** [CMakeFiles/RocketPlugin.dir/all] Error 2
+Makefile:140: recipe for target 'all' failed
+make: *** [all] Error 2

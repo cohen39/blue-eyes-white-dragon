@@ -121,19 +121,31 @@ def rockt_eval_func(jit=True):
     return rocket_functions
 
 
-def casadi_magic_MRP(jit=True):
+def pyecca_so3_quat(jit=True):
     q = ca.SX.sym('q', 4)
-    r = so3.Mrp.from_quat(q)
+    mrp = so3.Mrp.from_quat(q)
+    dcm = so3.Dcm.from_quat(q)
+    quat2mrp = ca.Function('quat2mrp',[q],[mrp],['q'],['mrp'])
+    quat2dcm = ca.Function('quat2dcm',[q],[dcm],['q'],['dcm'])
 
-    quat2mrp = ca.Function('quat2mrp',[q],[r],['q'],['r'])
+    v_e = ca.SX.sym('v_e',3)
+    v_b = ca.SX.sym('v_b',3)
+    omega_e = ca.SX.sym('omega_e',3)
+    omega_b = ca.SX.sym('omega_b',3)
+    v_b = ca.mtimes(dcm,v_e)
+    omega_b = ca.mtimes(dcm,omega_e)
 
-    return quat2mrp
+    tf_linvel = ca.Function('tf_linvel',[v_e,q],[v_b],['v_e','q'],['v_b'])
+    tf_angvel = ca.Function('tf_angvel',[omega_e,q],[omega_b],['omega_e','q'],['omega_b'])
+    return [quat2mrp,quat2dcm,tf_linvel,tf_angvel]
 
 rk_func = rockt_eval_func()
-rk_func.append(casadi_magic_MRP())
+so3_quat_func = pyecca_so3_quat()
 
+functions = rk_func+so3_quat_func
+print(len(functions))
 gen = ca.CodeGenerator('casadi_gen_rocket.c', {'main': False, 'mex': False, 'with_header': True, 'with_mem': True})
-for i in rk_func:
+for i in functions:
     gen.add(i)
 gen.generate()
 

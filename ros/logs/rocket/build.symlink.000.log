@@ -1,0 +1,21 @@
+Symlinking /home/kestrel1311/git/blue-eyes-white-dragon/ros/devel/lib/libRocketPlugin.so
+Symlinking /home/kestrel1311/git/blue-eyes-white-dragon/ros/devel/lib/librocket_msgs.so
+Symlinking /home/kestrel1311/git/blue-eyes-white-dragon/ros/devel/lib/pkgconfig/rocket.pc
+Symlinking /home/kestrel1311/git/blue-eyes-white-dragon/ros/devel/share/rocket/cmake/rocketConfig.cmake
+Symlinking /home/kestrel1311/git/blue-eyes-white-dragon/ros/devel/share/rocket/cmake/rocketConfig-version.cmake
+Cleaning: (/home/zp/aae497/blue-eyes-white-dragon/ros/devel/.private/rocket/cmake.lock, /home/zp/aae497/blue-eyes-white-dragon/ros/devel/./cmake.lock)
+Cleaning: (/home/zp/aae497/blue-eyes-white-dragon/ros/devel/.private/rocket/lib/librocket_msgs.so, /home/zp/aae497/blue-eyes-white-dragon/ros/devel/lib/librocket_msgs.so)
+Cleaning: (/home/zp/aae497/blue-eyes-white-dragon/ros/devel/.private/rocket/lib/libRocketPlugin.so, /home/zp/aae497/blue-eyes-white-dragon/ros/devel/lib/libRocketPlugin.so)
+Cleaning: (/home/zp/aae497/blue-eyes-white-dragon/ros/devel/.private/rocket/lib/pkgconfig/rocket.pc, /home/zp/aae497/blue-eyes-white-dragon/ros/devel/lib/pkgconfig/rocket.pc)
+Cleaning: (/home/zp/aae497/blue-eyes-white-dragon/ros/devel/.private/rocket/share/rocket/cmake/rocketConfig.cmake, /home/zp/aae497/blue-eyes-white-dragon/ros/devel/share/rocket/cmake/rocketConfig.cmake)
+Cleaning: (/home/zp/aae497/blue-eyes-white-dragon/ros/devel/.private/rocket/share/rocket/cmake/rocketConfig-version.cmake, /home/zp/aae497/blue-eyes-white-dragon/ros/devel/share/rocket/cmake/rocketConfig-version.cmake)
+Unlinking: /home/zp/aae497/blue-eyes-white-dragon/ros/devel/lib/librocket_msgs.so
+Already unlinked: {}
+Unlinking: /home/zp/aae497/blue-eyes-white-dragon/ros/devel/lib/libRocketPlugin.so
+Already unlinked: {}
+Unlinking: /home/zp/aae497/blue-eyes-white-dragon/ros/devel/lib/pkgconfig/rocket.pc
+Already unlinked: {}
+Unlinking: /home/zp/aae497/blue-eyes-white-dragon/ros/devel/share/rocket/cmake/rocketConfig.cmake
+Already unlinked: {}
+Unlinking: /home/zp/aae497/blue-eyes-white-dragon/ros/devel/share/rocket/cmake/rocketConfig-version.cmake
+Already unlinked: {}

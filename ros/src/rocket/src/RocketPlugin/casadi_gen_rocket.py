@@ -1,4 +1,5 @@
 import casadi as ca
+import numpy as np
 import sys
 
 sys.path.insert(0, '../../../../../python/pyecca')
@@ -97,7 +98,7 @@ def rockt_eval_func(jit=True):
         L = CL*q*s_fin
         D = CD*q*s_fin
         FA_b += L*perp_wind_dir - D*rel_wind_dir
-        MA_b += ca.cross(ca.vertcat(-l_fin, 0, 0), FA_b)
+        # MA_b += ca.cross(ca.vertcat(-l_fin, 0, 0), FA_b)
 
     # propulsion
     FP_b = ca.vertcat(m_dot*ve, 0, 0)
@@ -139,10 +140,40 @@ def pyecca_so3_quat(jit=True):
     tf_angvel = ca.Function('tf_angvel',[omega_e,q],[omega_b],['omega_e','q'],['omega_b'])
     return [quat2mrp,quat2dcm,tf_linvel,tf_angvel]
 
-rk_func = rockt_eval_func()
-so3_quat_func = pyecca_so3_quat()
+def ENU_state_2_NED_state(jit = True):
+    x_ENU = ca.SX.sym('x_ENU',14)
 
-functions = rk_func+so3_quat_func
+     # State: x
+    omega_neu = x_ENU[0:3]  # inertial angular velocity returned by gazebo
+    q_enu_trf = x_ENU[3:7]  # quaternions returned by gazebo
+    v_enu = x_ENU[7:10]  # inertial velocity expressed in body components
+    p_enu = x_ENU[10:13]  # positon in nav frame
+
+    m_fuel = x_ENU[13]  # mass, not changed
+    
+    C_ned_enu = np.array([[0,1,0],[1,0,0],[0,0,-1]]) # dcm from ENU 2 NED, world frame
+    C_trf_frb = np.array([[0,0,-1],[0,1,0],[1,0,0]]) # dcm from FRB 2 TRF, body frame
+    C_neu_trf = so3.Dcm.from_quat(q_enu_trf) # dcm from TRF 2 NEU
+
+    C_ned_frb = ca.mtimes(C_ned_enu,ca.mtimes(C_neu_trf,C_trf_frb)) # dcm from FRB 2 NED
+
+    r_ned_frb = so3.Mrp.from_dcm(C_ned_frb)
+    v_frb = ca.mtimes(C_ned_frb,v_enu)
+    omega_frb = ca.mtimes(C_ned_frb,omega_neu)
+    p_ned = ca.mtimes(C_ned_enu,p_enu)
+
+    x_NED = ca.vertcat(omega_frb,r_ned_frb,v_frb,p_ned,m_fuel)
+
+    state_ENU2NED = ca.Function('state_ENU2NED',[x_ENU],[x_NED],['x_ENU'],['x_NED'])
+
+    return state_ENU2NED
+
+
+functions = rockt_eval_func()
+#so3_quat_func = pyecca_so3_quat()
+state_tf = ENU_state_2_NED_state()
+
+functions.append(state_tf)
 print(len(functions))
 gen = ca.CodeGenerator('casadi_gen_rocket.c', {'main': False, 'mex': False, 'with_header': True, 'with_mem': True})
 for i in functions:

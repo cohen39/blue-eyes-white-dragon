@@ -162,9 +162,10 @@ namespace gazebo
       };
 
       /// states
-      private: double v_b[3] = {0};
-      private: double omg_b[3] = {0};
-      private: double r_nb[4] = {0};
+      private: double x[14]     = {0};
+      private: double v_b[3]    = {0};
+      private: double omg_b[3]  = {0};
+      private: double r_nb[4]   = {0};
       //private: double pos_n[3] ={0};
   };
 }

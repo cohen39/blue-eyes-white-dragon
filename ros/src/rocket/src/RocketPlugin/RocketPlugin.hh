@@ -136,12 +136,12 @@ namespace gazebo
       private: CasadiFunc _rocket_aero_moments;
       private: CasadiFunc _rocket_prop_forces;
       private: CasadiFunc _rocket_prop_moments;
-      private: CasadiFunc _quat2mrp; //
-      private: CasadiFunc _tf_linvel;
-      private: CasadiFunc _tf_angvel;
+      private: CasadiFunc _state_ENU2NED; //
+
 
     /// Forces and Moments
-      private: double FA_b[3]={0}, FP_b[3]={0}, MA_b[3]={0}, MP_b[3]={0}; 
+      private: double FA_b[3]={0}, FP_b[3]={0}, MA_b[3]={0}, MP_b[3]={0};
+
     /// Parameters of the rocket
       private: double p[15]= {
         9.81,         //gravitational constant
@@ -162,7 +162,8 @@ namespace gazebo
       };
 
       /// states
-      private: double x[14]     = {0};
+      private: double x_ENU[14] = {0};
+      private: double x_NED[14] = {0};
       private: double v_b[3]    = {0};
       private: double omg_b[3]  = {0};
       private: double r_nb[4]   = {0};

@@ -24,11 +24,12 @@
         <geometry>
           <mesh>
             <uri>model://rocket/meshes/stl/body.stl</uri>
+             <scale>0.015 0.015 0.015</scale>
           </mesh>
         </geometry>
         <material>
           <script>
-            <name>Gazebo/Grey</name>
+            <name>Gazebo/Blue</name>
           </script>
         </material>
       </visual>
@@ -131,7 +132,7 @@
         </geometry>
         <material>
           <script>
-            <name>Gazebo/Red</name>
+            <name>Gazebo/Green</name>
           </script>
         </material>
       </visual>
@@ -178,7 +179,7 @@
         </geometry>
         <material>
           <script>
-            <name>Gazebo/Red</name>
+            <name>Gazebo/Blue</name>
           </script>
         </material>
       </visual>
@@ -226,7 +227,7 @@
         </geometry>
         <material>
           <script>
-            <name>Gazebo/Red</name>
+            <name>Gazebo/White</name>
           </script>
         </material>
       </visual>

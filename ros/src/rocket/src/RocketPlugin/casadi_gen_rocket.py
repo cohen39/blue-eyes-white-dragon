@@ -151,11 +151,13 @@ def ENU_state_2_NED_state(jit = True):
 
     m_fuel = x_ENU[13]  # mass, not changed
     
+    C_enu_xyz = np.array([[0,1,0],[0,0,-1],[1,0,0]]) # ENU from XYZ, pi/2 pitch
     C_ned_enu = np.array([[0,1,0],[1,0,0],[0,0,-1]]) # dcm from ENU 2 NED, world frame
     C_trf_frb = np.array([[0,0,-1],[0,1,0],[1,0,0]]) # dcm from FRB 2 TRF, body frame
     C_neu_trf = so3.Dcm.from_quat(q_enu_trf) # dcm from TRF 2 NEU
 
-    C_ned_frb = ca.mtimes(C_ned_enu,ca.mtimes(C_neu_trf,C_trf_frb)) # dcm from FRB 2 NED
+    C_ned_frb = ca.mtimes(enu_xyz, C_ca.mtimes(C_ned_enu,ca.mtimes(C_neu_trf,C_trf_frb))) # dcm from FRB 2 NED
+
 
     r_ned_frb = so3.Mrp.from_dcm(C_ned_frb)
     v_frb = ca.mtimes(C_ned_frb,v_enu)

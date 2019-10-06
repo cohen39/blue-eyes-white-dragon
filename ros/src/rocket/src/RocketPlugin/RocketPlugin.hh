@@ -145,14 +145,14 @@ namespace gazebo
     /// Parameters of the rocket
       private: double p[15]= {
         9.81,         //gravitational constant
-        1,            //Jxx
-        1,            //Jyy
-        1,            //Jzz
+        1.0,            //Jxx
+        1.0,            //Jyy
+        1.0,            //Jzz
         0.1,          //Jxz
-        350,          //Ve
+        350.0,          //Ve
         1.0,          //l_fin
         2*3.14159265, //C_L_alpha
-        0,            //C_L_0
+        0.0,            //C_L_0
         0.01,         //C_D_0
         0.01,         //K
         0.05,         //sFin
@@ -167,7 +167,9 @@ namespace gazebo
       private: double v_b[3]    = {0};
       private: double omg_b[3]  = {0};
       private: double r_nb[4]   = {0};
-      //private: double pos_n[3] ={0};
+      
+      /// inputs
+      private: double u[4]      = {0.5,0,0,0};     //Set input to zero for now
   };
 }
 #endif

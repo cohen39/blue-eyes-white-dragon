@@ -5,11 +5,11 @@
     <link name='body'>
       <inertial>
         <pose>0 0 1.5 0 0 0</pose>
-        <mass>0.15</mass>
+        <mass>0.5</mass>
         <inertia>
-          <ixx>1.0</ixx>
-          <iyy>1.0</iyy>
-          <izz>1.0</izz>
+          <ixx>8.346</ixx>
+          <iyy>8.346</iyy>
+          <izz>0.059</izz>
         </inertia>
       </inertial>
       <collision name='collision'>
@@ -40,9 +40,9 @@
         <pose>0 0 2.9 0 0 0</pose>
         <mass>0.01</mass>
         <inertia>
-          <ixx>0.01</ixx>
-          <iyy>0.01</iyy>
-          <izz>0.01</izz>
+          <ixx>0.0018</ixx>
+          <iyy>0.0018</iyy>
+          <izz>0.0007</izz>
         </inertia>
       </inertial>
 

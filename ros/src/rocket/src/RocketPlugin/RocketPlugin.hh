@@ -155,7 +155,7 @@ namespace gazebo
         0.0,            //C_L_0
         0.01,         //C_D_0
         0.01,         //K
-        0.05,         //sFin
+        0.15,         //sFin
         1.225,        //rho
         0.2,          //m_empty
         1.0           //l_motor

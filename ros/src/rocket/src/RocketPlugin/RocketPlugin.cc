@@ -158,10 +158,15 @@ void RocketPlugin::Update(const common::UpdateInfo &/*_info*/)
     // ref to definition of Model.hh to get parameters
     auto  motor_inertial= this->motor->GetInertial();
     float m_fuel        = motor_inertial->Mass();
-    float m_dot         = 0.1;
+    float m_dot         = u[0];
     float m_empty       = 0.0;
           m_fuel        = m_fuel - m_dot*dt; // x[13]
-  
+    if (m_fuel <=0 )
+    {
+      m_fuel = 0;
+      u[0] = 0;
+    }
+    
     float ve            = this->p[6];        // exit velocity, m/s, guess
     
     // Get current states from gazebo
@@ -202,18 +207,20 @@ void RocketPlugin::Update(const common::UpdateInfo &/*_info*/)
     //TODO: Make sure local csys convention in Gazebo is consistent with what we used for formulation of casadi functions
     //Apply updated forces and moments to rocket body and motor in gazebo
     
-    // gzdbg << "M_fuel" << m_fuel << std::endl;
+    gzdbg << "M_fuel" << m_fuel << std::endl;
     // gzdbg << "FP_b[0]=" << FP_b[0] << " FP_b[1]=" << FP_b[1] << " FP_b[2]=" << FP_b[2] << "\n" << std::endl;
     
-    this->motor->AddRelativeForce (ignition::math::Vector3d(FP_b[2], FP_b[1], FP_b[0]));
-    
-    this->body ->AddRelativeForce (ignition::math::Vector3d(-FA_b[2], -FA_b[1], -FA_b[0]));
-    gzdbg << "FA_b[0]=" << FA_b[0] << " FA_b[1]=" << FA_b[1] << " FA_b[2]=" << FA_b[2] << "\n" << std::endl;
-    this->motor->AddRelativeTorque(ignition::math::Vector3d(MP_b[2], MP_b[1], MP_b[0]));
-    this->body ->AddRelativeTorque(ignition::math::Vector3d(MA_b[2], MA_b[1], MA_b[0]));
+    this->motor->AddRelativeForce (ignition::math::Vector3d(-FP_b[2], FP_b[1], FP_b[0]));
+    this->motor->AddRelativeTorque(ignition::math::Vector3d(-MP_b[2], MP_b[1], MP_b[0]));
+
+    this->body ->AddRelativeForce (ignition::math::Vector3d(-FA_b[2], FA_b[1], FA_b[0]));
+    this->body ->AddRelativeTorque(ignition::math::Vector3d(-MA_b[2], MA_b[1], MA_b[0]));
+
+    gzdbg << "FA_F=" << FA_b[0] << " FA_R=" << FA_b[1] << " FA_D=" << FA_b[2] << std::endl;
+    gzdbg << "MA_F=" << MA_b[0] << " MA_R=" << MA_b[1] << " MA_D=" << MA_b[2] << "\n" << std::endl;
 
     motor_inertial->SetMass(m_fuel);
-    motor_inertial->SetInertiaMatrix(0, 0, 0, 0, 0, 0); // treat as point mass
+    motor_inertial->SetInertiaMatrix(0.0001, 0.0001, 0.0001, 0.0001, 0.0001, 0.0001); // treat as point mass
     this->lastUpdateTime = curTime;
   }
 }

@@ -5,7 +5,7 @@
     <link name='body'>
       <inertial>
         <pose>0 0 1.5 0 0 0</pose>
-        <mass>0.5</mass>
+        <mass>0.2</mass>
         <inertia>
           <ixx>8.346</ixx>
           <iyy>8.346</iyy>
@@ -23,8 +23,8 @@
         <cast_shadows>0</cast_shadows>
         <geometry>
           <mesh>
-            <uri>model://rocket/meshes/stl/bewd.stl</uri>
-             <scale>0.015 0.015 0.015</scale>
+            <uri>model://rocket/meshes/stl/body.stl</uri>
+             <!-- <scale>0.015 0.015 0.015</scale> -->
           </mesh>
         </geometry>
         <material>
@@ -113,7 +113,7 @@
     </joint>
 
     <link name='fin2'>
-      <pose>0 0 0 0 0 1.57</pose>
+      <pose>0 0 0 0 0 -1.57</pose>
       <inertial>
         <pose>0.2 0 0.2 0 0 0</pose>
         <mass>0.01</mass>
@@ -208,7 +208,7 @@
 
 
     <link name='fin4'>
-      <pose>0 0 0 0 0 -1.57</pose>
+      <pose>0 0 0 0 0 1.57</pose>
       <inertial>
         <pose>0.2 0 0.2 0 0 0</pose>
         <mass>0.01</mass>
@@ -276,7 +276,12 @@
     <link name='rocket_motor'>
       <pose>0 0 0 0 0 0</pose>
       <inertial>
-        <mass>10.0</mass>
+        <mass>5.0</mass>
+        <inertia>
+          <ixx>0.0001</ixx>
+          <iyy>0.0001</iyy>
+          <izz>0.0001</izz>
+        </inertia>
       </inertial>
       <visual name='visual'>
         <cast_shadows>0</cast_shadows>

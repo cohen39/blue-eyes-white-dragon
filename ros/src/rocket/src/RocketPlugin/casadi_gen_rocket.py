@@ -85,7 +85,7 @@ def rockt_eval_func(jit=True):
         fwd = data['fwd']
         up = data['up']
         mix = data['mix']
-        U = ca.dot(fwd, v_b)
+        U = ca.dot(fwd, -v_b)
         W = ca.dot(up, v_b)
         alpha = ca.if_else(
             ca.logic_and(ca.fabs(W) > vel_tol, ca.fabs(U) > vel_tol),
@@ -151,20 +151,20 @@ def ENU_state_2_NED_state(jit = True):
 
     m_fuel = x_ENU[13]  # mass, not changed
     
-    C_trf_xyz = np.array([[0,1,0],[0,0,-1],[1,0,0]]) # dcm from XYZ 2 ENU, pi/2 pitch
+    C_ini_rot = np.array([[0,0,1],[1,0,0],[0,1,0]])  # dcm accounting for the initial rotation
     C_ned_enu = np.array([[0,1,0],[1,0,0],[0,0,-1]]) # dcm from ENU 2 NED, world frame
-    C_trf_frb = np.array([[0,0,-1],[0,1,0],[1,0,0]]) # dcm from FRB 2 TRF, body frame
-    C_enu_trf = so3.Dcm.from_quat(q_enu_trf) # dcm from TRF 2 NEU
+    C_trf_frd = np.array([[0,0,-1],[0,1,0],[1,0,0]]) # dcm from FRD 2 TRF, body frame
+    C_enu_trf = so3.Dcm.from_quat(q_enu_trf)         # dcm from ENU 2 TRF
 
-    C_ned_frb = ca.mtimes([C_ned_enu, C_enu_trf, C_trf_frb]) # dcm from FRB 2 NED
-    C_frb_enu = ca.mtimes(C_enu_trf, C_trf_frb)
+    C_frd_ned = ca.mtimes([C_ned_enu, C_enu_trf, C_trf_frd]) # dcm from NED 2 FRD
+    C_frd_enu = ca.mtimes(C_trf_frd.T, C_enu_trf.T)
 
-    r_ned_frb = so3.Mrp.from_dcm(C_ned_frb)
-    v_frb = ca.mtimes(C_frb_enu,v_enu)
-    omega_frb = ca.mtimes(C_frb_enu,omega_enu)
+    r_ned_frd = so3.Mrp.from_dcm(C_frd_ned)
+    v_frd = ca.mtimes(C_frd_enu,v_enu)
+    omega_frd = ca.mtimes(C_frd_enu,omega_enu)
     p_ned = ca.mtimes(C_ned_enu,p_enu)
 
-    x_NED = ca.vertcat(omega_frb,r_ned_frb,v_frb,p_ned,m_fuel)
+    x_NED = ca.vertcat(omega_frd,r_ned_frd,v_frd,p_ned,m_fuel)
 
     state_ENU2NED = ca.Function('state_ENU2NED',[x_ENU],[x_NED],['x_ENU'],['x_NED'])
 

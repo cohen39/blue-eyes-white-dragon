@@ -99,7 +99,7 @@
           <name>rocket</name>
           <use_model_frame>1</use_model_frame>
           <min_dist>1</min_dist>
-          <max_dist>100</max_dist>
+          <max_dist>30</max_dist> 
         </track_visual>
       </camera>
     </gui>

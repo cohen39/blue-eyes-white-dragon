@@ -207,7 +207,7 @@ void RocketPlugin::Update(const common::UpdateInfo &/*_info*/)
     
     this->motor->AddRelativeForce (ignition::math::Vector3d(FP_b[2], FP_b[1], FP_b[0]));
     
-    this->body ->AddRelativeForce (ignition::math::Vector3d(FA_b[2], FA_b[1], FA_b[0]));
+    this->body ->AddRelativeForce (ignition::math::Vector3d(-FA_b[2], -FA_b[1], -FA_b[0]));
     gzdbg << "FA_b[0]=" << FA_b[0] << " FA_b[1]=" << FA_b[1] << " FA_b[2]=" << FA_b[2] << "\n" << std::endl;
     this->motor->AddRelativeTorque(ignition::math::Vector3d(MP_b[2], MP_b[1], MP_b[0]));
     this->body ->AddRelativeTorque(ignition::math::Vector3d(MA_b[2], MA_b[1], MA_b[0]));

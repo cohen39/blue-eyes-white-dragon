@@ -29,12 +29,45 @@
 #include <gazebo/msgs/msgs.hh>
 #include <gazebo/physics/PhysicsTypes.hh>
 #include <gazebo/transport/TransportTypes.hh>
+#include "rocket.pb.h"
 #include "casadi/CasadiFunc.hpp"
 #include "casadi_gen.h"
+#include <math.h>
+
 
 namespace gazebo
 {
 
+  typedef const boost::shared_ptr<const msgs::Rocket> ConstRocketPtr;
+  /// \brief Allow moving the control surfaces of a Rocket plane. This
+  /// plugin might be used with other models that have similar control surfaces.
+  ///
+  /// The plugin requires the following parameters:
+  /// <propeller>         Name of the joint controlling the propeller spin.
+  /// <propeller_max_rpm> Maximum angular speed in rpm.
+  /// <left_aileron>      Name of the joint controlling the left aileron.
+  /// <left_flap>         Name of the joint controlling the left flap.
+  /// <right_aileron>     Name of the joint controlling the right aileron.
+  /// <right_flap>        Name of the joint controlling the right flap.
+  /// <elevators>         Name of the joint controlling the rear elevators.
+  /// <rudder>            Name of the joint controlling the rudder.
+  ///
+  /// The following parameters are optional:
+  /// <propeller_p_gain> P gain for the PID that controls the propeller's speed.
+  /// <propeller_i_gain> I gain for the PID that controls the propeller's speed.
+  /// <propeller_d_gain> D gain for the PID that controls the propeller's speed.
+  /// <surfaces_p_gain> P gain for the PID that controls the position of the
+  ///                   control surfaces.
+  /// <surfaces_i_gain> I gain for the PID that controls the position of the
+  ///                   control surfaces.
+  /// <surfaces_d_gain> D gain for the PID that controls the position of the
+  ///                   control surfaces.
+  ///
+  /// The plugin will be subscribed to the following topic:
+  /// "~/<model_name>/control" The expected value is a Rocket message.
+  ///
+  /// The plugin will advertise the following topic with the current state:
+  /// "~/<model_name>/state"
   class GAZEBO_VISIBLE RocketPlugin : public ModelPlugin
   {
     /// \brief Constructor.
@@ -79,6 +112,9 @@ namespace gazebo
     /// \brief Pointer to the model;
     private: physics::ModelPtr model;
 
+    /// \brief Motor Link
+    private: physics::LinkPtr body;
+
     /// \brief keep track of controller update sim-time.
     private: gazebo::common::Time lastUpdateTime;
 
@@ -94,14 +130,14 @@ namespace gazebo
     /// \brief Ignition Publisher.
     private: ignition::transport::Node::Publisher statePubIgn;
 
-    /// \brief Motor Link
-    private: physics::LinkPtr body;
+    /// \brief Our casadi function
+      private: CasadiFunc _rocket_force_moment;
 
-	  /// \brief Our casadi function
-    private: CasadiFunc rocket_force_moment;
+    /// Forces and Moments
+      private: double F_b[3]={0,0,0}, M_b[3]={0,0,0};
 
-    /// \default parameters
-    private: double p[15]= {
+    /// Parameters of the rocket
+      private: double p[15]= {
         9.81,         //gravitational constant
         1.0,            //Jxx
         1.0,            //Jyy
@@ -109,7 +145,7 @@ namespace gazebo
         0.1,          //Jxz
         350.0,          //Ve
         1,          //l_fin
-        2*3.1415926535,     //C_L_alpha
+        2*M_PI, //C_L_alpha
         0.0,            //C_L_0
         0.01,         //C_D_0
         0.01,         //K
@@ -118,7 +154,12 @@ namespace gazebo
         0.2,          //m_empty
         1.0           //l_motor
       };
-    private: double m_dot = 0.1;
+
+      /// states
+      private: double x_gzb[14] = {0};
+      
+      /// inputs
+      private: double u[4]      = {0.1,0,0,0};     //Set input to zero for now
   };
 }
 #endif

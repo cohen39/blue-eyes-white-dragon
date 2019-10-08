@@ -5,12 +5,6 @@
     <link name='body'>
       <inertial>
         <pose>0 0 1.5 0 0 0</pose>
-        <mass>10</mass>
-        <!-- <inertia>
-          <ixx>8.346</ixx>
-          <iyy>8.346</iyy>
-          <izz>0.059</izz>
-        </inertia> -->
       </inertial>
       <collision name='body_collision'>
         <pose>0 0 0 0 1.57 0</pose>
@@ -202,6 +196,24 @@
 
     <plugin name="rocket_plugin" filename="libRocketPlugin.so">
       <body>body</body>
+      <g> 9.81 </g>
+      <Jx> 8.0 </Jx>
+      <Jy> 8.0 </Jy>
+      <Jz> 1.0 </Jz>
+      <Jxz> 0.0 </Jxz>
+      <ve> 350.0 </ve>
+      <l_fin> 1.0 </l_fin>
+      <CL_a> 6.283185307 </CL_a>
+      <CL_0> 0.0 </CL_0>
+      <CD_0> 0.01 </CD_0>
+      <K> 0.01 </K>
+      <s_fin> 0.05 </s_fin>
+      <rho> 1.225 </rho>
+      <l_motor> 1 </l_motor>
+      <m_empty> 0.2 </m_empty>
+      
+      <m_dot> 0.1 </m_dot>
+      <m_total> 1 </m_total>
     </plugin>
 
   </model>

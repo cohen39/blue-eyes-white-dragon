@@ -21,7 +21,7 @@
     </include>
 
     <include>
-      <pose>0 0 1 0 -.7853 0</pose>
+      <pose>0 0 1 0 -1.4 0</pose>
       <uri>model://rocket</uri>
     </include>
 
@@ -98,6 +98,8 @@
         <track_visual>
           <name>rocket</name>
           <use_model_frame>1</use_model_frame>
+          <static> true </static>
+          <xyz>10 10 10</xyz>
           <min_dist>1</min_dist>
           <max_dist>30</max_dist> 
         </track_visual>

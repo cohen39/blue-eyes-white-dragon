@@ -31,8 +31,8 @@
 #include <gazebo/transport/TransportTypes.hh>
 #include "rocket.pb.h"
 #include "casadi/CasadiFunc.hpp"
-// #include "casadi_gen.h"
-#include "casadi_gen_rocket.h"
+#include "casadi_gen.h"
+// #include "casadi_gen_rocket.h"
 
 namespace gazebo
 {
@@ -112,7 +112,6 @@ namespace gazebo
     private: physics::ModelPtr model;
 
     /// \brief Motor Link
-    private: physics::LinkPtr motor;
     private: physics::LinkPtr body;
 
     /// \brief keep track of controller update sim-time.
@@ -131,16 +130,10 @@ namespace gazebo
     private: ignition::transport::Node::Publisher statePubIgn;
 
     /// \brief Our casadi function
-      // private: CasadiFunc _double_this;
-      private: CasadiFunc _rocket_aero_forces;
-      private: CasadiFunc _rocket_aero_moments;
-      private: CasadiFunc _rocket_prop_forces;
-      private: CasadiFunc _rocket_prop_moments;
-      private: CasadiFunc _state_ENU2NED; //
-
+      private: CasadiFunc _rocket_force_moment;
 
     /// Forces and Moments
-      private: double FA_b[3]={0}, FP_b[3]={0}, MA_b[3]={0}, MP_b[3]={0};
+      private: double F_b[3]={0}, M_b[3]={0};
 
     /// Parameters of the rocket
       private: double p[15]= {
@@ -162,14 +155,10 @@ namespace gazebo
       };
 
       /// states
-      private: double x_ENU[14] = {0};
-      private: double x_NED[14] = {0};
-      private: double v_b[3]    = {0};
-      private: double omg_b[3]  = {0};
-      private: double r_nb[4]   = {0};
+      private: double x_gzb[14] = {0};
       
       /// inputs
-      private: double u[4]      = {0.5,0,0,0};     //Set input to zero for now
+      private: double u[4]      = {0.8,0,0,0};     //Set input to zero for now
   };
 }
 #endif

@@ -98,7 +98,7 @@ def rockt_eval_func(jit=True):
         L = CL*q*s_fin
         D = CD*q*s_fin
         FA_b += L*perp_wind_dir - D*rel_wind_dir
-        # MA_b += ca.cross(ca.vertcat(-l_fin, 0, 0), FA_b)
+        MA_b += ca.cross(ca.vertcat(-l_fin, 0, 0), FA_b)
 
     # propulsion
     FP_b = ca.vertcat(m_dot*ve, 0, 0)
@@ -156,7 +156,7 @@ def ENU_state_2_NED_state(jit = True):
     C_trf_frd = np.array([[0,0,-1],[0,1,0],[1,0,0]]) # dcm from FRD 2 TRF, body frame
     C_enu_trf = so3.Dcm.from_quat(q_enu_trf)         # dcm from ENU 2 TRF
 
-    C_frd_ned = ca.mtimes([C_ned_enu, C_enu_trf, C_trf_frd]) # dcm from NED 2 FRD
+    C_frd_ned = ca.mtimes([C_ned_enu, C_enu_trf.T, C_trf_frd]) # dcm from NED 2 FRD
     C_frd_enu = ca.mtimes(C_trf_frd.T, C_enu_trf.T)
 
     r_ned_frd = so3.Mrp.from_dcm(C_frd_ned)

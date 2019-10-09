@@ -111,7 +111,7 @@ def rocket_equations(jit=True):
     FP_b = ca.vertcat(m_dot*ve, 0, 0)
     
     # force and momental total
-    F_b = FA_b + FP_b + ca.mtimes(C_nb.T, m*g_n)
+    F_b = FA_b + FP_b #+ ca.mtimes(C_nb.T, m*g_n)
     M_b = ca.cross(ca.vertcat(-l_fin, 0, 0), FA_b)
     
 

@@ -4,7 +4,7 @@
 
     <link name='body'>
       <inertial>
-        <pose>0 0 1.5 0 0 0</pose>
+        <pose>1.0 0 0 0 1.57 0</pose>
       </inertial>
       <collision name='body_collision'>
         <pose>0 0 0 0 1.57 0</pose>
@@ -15,11 +15,10 @@
         </geometry>
       </collision>
       <visual name='body_visual'>
-        <pose>0 0 0 0 0 -1.57</pose>
+        <pose>0 0 0 0 1.57 0</pose>
         <geometry>
           <mesh>
-            <uri>model://rocket/meshes/stl/bewd.stl</uri>
-            <scale>0.015 0.015 0.015</scale>
+            <uri>model://rocket/meshes/stl/body.stl</uri>
           </mesh>
         </geometry>
         <material>
@@ -51,23 +50,16 @@
       </visual>
     </link>
 
-    <link name='fin1'>
-      <pose>0 0 0 0 0 0</pose>
+    <link name='fin0'>
+      <pose>0 0 0.1 0 0 0</pose>
       <inertial>
         <mass>1e-5</mass>
         <inertia>
-          <ixx>0</ixx>
-          <iyy>0</iyy>
-          <izz>0</izz>
+          <ixx>1e-5</ixx>
+          <iyy>1e-5</iyy>
+          <izz>1e-5</izz>
         </inertia>
       </inertial>
-      <collision name='collision'>
-=        <geometry>
-          <mesh>
-            <uri>model://rocket/meshes/stl/fin.stl</uri>
-          </mesh>
-        </geometry>
-      </collision>
       <visual name='visual'>
         <geometry>
           <mesh>
@@ -82,28 +74,25 @@
       </visual>
     </link>
 
-    <joint name="fin1_joint" type="fixed">
+    <joint name="fin0_joint" type="revolute">
+      <pose>0.3 0 0 0 0 0</pose>
       <parent>body</parent>
-      <child>fin1</child>
+      <child>fin0</child>
+      <axis>
+        <xyz>0 0 -1</xyz>
+      </axis>
     </joint>
 
-    <link name='fin2'>
-      <pose>0 0 0 -1.57 0 0</pose>
+    <link name='fin1'>
+      <pose>0 0.1 0 -1.57 0 0</pose>
        <inertial>
         <mass>1e-5</mass>
         <inertia>
-          <ixx>0</ixx>
-          <iyy>0</iyy>
-          <izz>0</izz>
+          <ixx>1e-5</ixx>
+          <iyy>1e-5</iyy>
+          <izz>1e-5</izz>
         </inertia>
       </inertial>
-      <collision name='collision'>
-        <geometry>
-          <mesh>
-            <uri>model://rocket/meshes/stl/fin.stl</uri>
-          </mesh>
-        </geometry>
-      </collision>
       <visual name='visual'>
         <geometry>
           <mesh>
@@ -118,28 +107,25 @@
       </visual>
     </link>
 
-    <joint name="fin2_joint" type="fixed">
+    <joint name="fin1_joint" type="revolute">
+      <pose>0.3 0.0 0 0 0 0</pose>
       <parent>body</parent>
-      <child>fin2</child>
+      <child>fin1</child>
+      <axis>
+        <xyz>0 0 -1</xyz>
+      </axis>
     </joint>
 
-    <link name='fin3'>
-      <pose>0 0 0 3.14 0 0</pose>
+    <link name='fin2'>
+      <pose>0 0 -0.1 3.14 0 0</pose>
       <inertial>
         <mass>1e-5</mass>
         <inertia>
-          <ixx>0</ixx>
-          <iyy>0</iyy>
-          <izz>0</izz>
+          <ixx>1e-5</ixx>
+          <iyy>1e-5</iyy>
+          <izz>1e-5</izz>
         </inertia>
       </inertial>
-      <collision name='collision'>
-        <geometry>
-          <mesh>
-            <uri>model://rocket/meshes/stl/fin.stl</uri>
-          </mesh>
-        </geometry>
-      </collision>
       <visual name='visual'>
         <geometry>
           <mesh>
@@ -154,28 +140,25 @@
       </visual>
     </link>
 
-    <joint name="fin3_joint" type="fixed">
+    <joint name="fin2_joint" type="revolute">
+      <pose>0.3 0.0 0 0 0 0</pose>
       <parent>body</parent>
-      <child>fin3</child>
+      <child>fin2</child>
+      <axis>
+        <xyz>0 0 -1</xyz>
+      </axis>
     </joint>
 
-    <link name='fin4'>
-      <pose>0 0 0 1.57 0 0</pose>
+    <link name='fin3'>
+      <pose>0 -0.1 0 1.57 0 0</pose>
       <inertial>
         <mass>1e-5</mass>
         <inertia>
-          <ixx>0</ixx>
-          <iyy>0</iyy>
-          <izz>0</izz>
+          <ixx>1e-5</ixx>
+          <iyy>1e-5</iyy>
+          <izz>1e-5</izz>
         </inertia>
       </inertial>
-      <collision name='collision'>
-        <geometry>
-          <mesh>
-            <uri>model://rocket/meshes/stl/fin.stl</uri>
-          </mesh>
-        </geometry>
-      </collision>
       <visual name='visual'>
         <geometry>
           <mesh>
@@ -190,31 +173,21 @@
       </visual>
     </link>
 
-    <joint name="fin4_joint" type="fixed">
+    <joint name="fin3_joint" type="revolute">
+      <pose>0.3 0.0 0 0 0 0</pose>
       <parent>body</parent>
-      <child>fin4</child>
+      <child>fin3</child>
+      <axis>
+        <xyz>0 0 -1</xyz>
+      </axis>
     </joint>
 
     <plugin name="rocket_plugin" filename="libRocketPlugin.so">
       <body>body</body>
-      <g> 9.81 </g>
-      <Jx> 8.0 </Jx>
-      <Jy> 8.0 </Jy>
-      <Jz> 1.0 </Jz>
-      <Jxz> 0.0 </Jxz>
-      <ve> 350.0 </ve>
-      <l_fin> 1.0 </l_fin>
-      <CL_a> 6.283185307 </CL_a>
-      <CL_0> 0.0 </CL_0>
-      <CD_0> 0.01 </CD_0>
-      <K> 0.01 </K>
-      <s_fin> 0.05 </s_fin>
-      <rho> 1.225 </rho>
-      <l_motor> 1 </l_motor>
-      <m_empty> 0.2 </m_empty>
-      
-      <m_dot> 0.1 </m_dot>
-      <m_total> 1 </m_total>
+      <fin0>fin0_joint</fin0>
+      <fin1>fin1_joint</fin1>
+      <fin2>fin2_joint</fin2>
+      <fin3>fin3_joint</fin3>
     </plugin>
 
   </model>

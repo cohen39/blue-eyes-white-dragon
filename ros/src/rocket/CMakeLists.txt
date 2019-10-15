@@ -143,7 +143,6 @@ target_link_libraries(rocket_msgs ${PROTOBUF_LIBRARY})
 add_library(RocketPlugin
 	src/RocketPlugin/RocketPlugin.cc
 	src/RocketPlugin/casadi_gen.c
-	src/RocketPlugin/casadi_gen_rocket.c
 )
 target_link_libraries(RocketPlugin ${GAZEBO_LIBRARIES} rocket_msgs)
 

@@ -1,6 +1,7 @@
 import casadi as ca
 import numpy as np
 import sys
+import control
 
 sys.path.insert(0, '../../../../../python/pyecca')
 
@@ -472,9 +473,9 @@ def do_trim(vt, gamma_deg, m_fuel):
 
     fmt_str = 'status:\t{:s}\nf:\t{:5.3f}\ng:\t{:s}\nm_dot:\t{:5.3f} kg/s\nalpha:\t{:5.3f} deg\nbeta:\t{:5.3f} deg\n' \
             'ail:\t{:5.3f} deg\nelv:\t{:5.3f} deg\nrdr:\t{:5.3f} deg\ntheta:\t{:5.3f} deg'
-    print(fmt_str.format(
-        res['status'], res['f'], str(res['g']),
-        m_dot, alpha_deg, beta_deg, ail_deg, elv_deg, rdr_deg, theta_deg))
+    # print(fmt_str.format(
+    #     res['status'], res['f'], str(res['g']),
+    #     m_dot, alpha_deg, beta_deg, ail_deg, elv_deg, rdr_deg, theta_deg))
 
     # s: m_dot, alpha, beta, ail, elev, rdr
     # u:  m_dot, aileron, elevator, rudder
@@ -506,28 +507,48 @@ def linearize():
     return ca.Function('ss', [x, u, p], [A, B, C, D],
             ['x', 'u', 'p'], ['A', 'B', 'C', 'D'])
 
+def control_rocket(x,p,t):
+    u = ca.SX.sym('u',4)
 
-if __name__ == "__main__":
-    import control
-    #run()
-    code_generation()
-    #x0 u0 p0
+    return u
+
+
+def plan_traj():
     path_points = [do_trim(vt=100, gamma_deg=90, m_fuel=0.8)]
     path_points.append(do_trim(vt=100, gamma_deg= 45, m_fuel = 0.4))
     path_points.append(do_trim(vt=100, gamma_deg = 0,m_fuel = 0))
     lin = linearize()
     sys = []
-    for p in path_points:
+    ABCDs = []
+    gam_ref = [90,45,0]
+    h_ref = [0,]
+    for i,p in enumerate(path_points):
         x0 = p[0]
         u0 = p[1]
         p0 = p[2]
-        sys.append(control.ss(*lin(x0,u0,p0)))
-
+        A,B,C,D = lin(x0,u0,p0)
+        ABCDs.append([A,B,C,D])
+        sys.append(control.ss(A,B,C,D))
     
+    return sys
+
+
+if __name__ == "__main__":
+    #run()
+    #code_generation()
+    plan_traj()
+
+    sys = plan_traj()
     # get pitch rate from elevator
-    # G = control.ss2tf(sys1[1, 2])
-    # control.rlocus(G)
-    # plt.show()
+    Gp1 = control.ss2tf(sys[0][1, 2])
+    plt.figure()
+    control.rlocus(Gp1)
+    plt.show()
+
+    Gp2 = control.ss2tf(sys[1][1,2])
+    plt.figure()
+    control.rlocus(Gp2)
+    plt.show()
 
     # next steps
     # pitch rate pid design, use this to control pitch angle

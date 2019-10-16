@@ -508,18 +508,26 @@ def linearize():
 
 
 if __name__ == "__main__":
-    run()
-    code_generation()
-
-    x0, u0, p0 = do_trim(vt=100, gamma_deg=90, m_fuel=0.8)
-    lin = linearize()
     import control
-    sys1 = control.ss(*lin(x0, u0, p0))
+    #run()
+    code_generation()
+    #x0 u0 p0
+    path_points = [do_trim(vt=100, gamma_deg=90, m_fuel=0.8)]
+    path_points.append(do_trim(vt=100, gamma_deg= 45, m_fuel = 0.4))
+    path_points.append(do_trim(vt=100, gamma_deg = 0,m_fuel = 0))
+    lin = linearize()
+    sys = []
+    for p in path_points:
+        x0 = p[0]
+        u0 = p[1]
+        p0 = p[2]
+        sys.append(control.ss(*lin(x0,u0,p0)))
 
+    
     # get pitch rate from elevator
-    G = control.ss2tf(sys1[1, 2])
-    control.rlocus(G)
-    plt.show()
+    # G = control.ss2tf(sys1[1, 2])
+    # control.rlocus(G)
+    # plt.show()
 
     # next steps
     # pitch rate pid design, use this to control pitch angle

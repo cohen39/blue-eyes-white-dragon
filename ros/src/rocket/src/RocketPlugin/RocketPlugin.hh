@@ -85,8 +85,11 @@ namespace gazebo
 	/// \brief Our casadi functions
     private: CasadiFunc state_from_gz;
     private: CasadiFunc rocket_u_to_fin;
-    private: CasadiFunc rocket_control;
+    private: CasadiFunc pitch_control;
     private: CasadiFunc rocket_force_moment;
+
+    private: double x_pitch_ctrl[2] = {0,0};
+    private: double t0; 
   };
 }
 #endif

@@ -1,7 +1,6 @@
 import casadi as ca
 import numpy as np
 import sys
-import control
 
 sys.path.insert(0, '../../../../../python/pyecca')
 
@@ -160,6 +159,16 @@ def rocket_equations(jit=True):
     euler = so3.Euler.from_mrp(r_nb) # roll, pitch, yaw
     pitch = euler[1]
 
+    # control
+    u_control = ca.SX.zeros(4)
+    # these controls are just test controls to make sure the fins are working
+    u_control[0] = 0.1  # mass flow rate
+    u_control[1] = 0
+    u_control[2] = (pitch - 1)
+    u_control[3] = 0
+    control = ca.Function('control', [x, p, t, dt], [u_control],
+        ['x', 'p', 't', 'dt'], ['u'])
+
     # initialize
     pitch_deg = ca.SX.sym('pitch_deg')
     omega0_b = ca.vertcat(0, 0, 0)
@@ -176,6 +185,7 @@ def rocket_equations(jit=True):
     return {
         'rhs': rhs,
         'predict': predict,
+        'control': control,
         'initialize': initialize,
         'force_moment': force_moment,
         'x': x,
@@ -183,50 +193,6 @@ def rocket_equations(jit=True):
         'p': p
     }
     return rhs, x, u, p
-
-def control_equations(jit=True):
-    #define symbolic inputs and outputs
-    x_pitch_ctrl    = ca.SX.sym('x_pitch_ctrl', 2)
-    u_pitch_cmd     = ca.SX.sym('u_pitch_cmd', 1)
-    x_rocket_state  = ca.SX.sym('x_rocket_state', 14)
-    y_elev_cmd      = ca.SX.sym('y_elev_cmd',1)
-    x1_pitch_ctrl   = ca.SX.sym('x1_pitch_ctrl',2)
-    p               = ca.SX.sym('p', 16) #Pass in all vehicle and environment metrics in case we need to use them 
-
-    #define intermediate variables
-    rho = p[13] #density
-
-
-    #Below comments label according to general SS form x_dot = Ax + bu, y = Cx + du
-    
-    #Get actual pitch using modified rodrigues parameters
-    r_nb = x_rocket_state[3:7]
-    euler = so3.Euler.from_mrp(r_nb) # roll, pitch, yaw
-    x_actual_pitch  = euler[1]
-
-    #u for our SS pitch controller
-    pitch_error     = (u_pitch_cmd - x_actual_pitch)
-
-    #Convert control tf to controllable canonical form with A,B,C,D matrices 
-    s = control.tf([1, 0], [0, 1])
-    H = 10*(s/100+1)*(s/100+1)/s*(70/(s+70))
-    Hd = control.tf2ss(control.c2d(H, 0.004))
-
-    #Compute discrete analog of x_dot and y 
-    x1_pitch_ctrl   = ca.mtimes(Hd.A, x_pitch_ctrl) + ca.mtimes(Hd.B, pitch_error)
-    y_elev_cmd      = ca.mtimes(Hd.C, x_pitch_ctrl) + ca.mtimes(Hd.D, pitch_error)
-
-    pitch_control = ca.Function(
-        'pitch_control', [x_pitch_ctrl, u_pitch_cmd, x_rocket_state, p], [x1_pitch_ctrl, y_elev_cmd], ['x_pitch_ctrl', 'u_pitch_cmd', 'x_rocket_state', 'p'], ['x1_pitch_ctrl', 'y_elev_cmd'])
-
-    return {
-        'pitch_control': pitch_control,
-        'x_pitch_ctrl': x_pitch_ctrl,
-        'u_pitch_cmd': u_pitch_cmd,
-        'x_rocket_state': x_rocket_state,
-        'x1_pitch_ctrl': x1_pitch_ctrl,
-        'y_elev_cmd': y_elev_cmd
-    }
 
 
 def analyze_data(data):
@@ -298,42 +264,27 @@ def analyze_data(data):
     plt.grid()
 
 
-# def simulate(rocket, control_eqn, x0, p0, dt=0.004, t0=0, tf=15):
-#     """
-#     An integrator using a fixed step runge-kutta approach.
-#     """
-#     x = x0
-#     x_pitch_ctrl = [0,0]
-#     p = p0
-#     u_pitch_cmd = np.deg2rad(70)
-#     t_step = 10
-
-
-#     x1_pitch_ctrl, y_elev_cmd  = control_eqn['pitch_control'](x_pitch_ctrl, u_pitch_cmd, x, p)
-    
-#     u = [0,y_elev_cmd,0]
-
-#     data = {
-#         't': [],
-#         'x': [],
-#         'u_pitch_cmd': []
-#         }
-    
-#     for t in np.arange(t0, tf, dt):
-#         data['t'].append(t)
-#         data['x'].append(np.array(x).reshape(-1))
-#         data['u_pitch_cmd'].append(np.array(u_pitch_cmd).reshape(-1))
-
-#         if t > t_step:
-#             u_pitch_cmd = u_pitch_cmd - u_pitch_cmd*0.2 
-
-#         x1_pitch_ctrl, y_elev_cmd  = control_eqn['pitch_control'](x1_pitch_ctrl, u_pitch_cmd, x, p)
-#         u[2] = y_elev_cmd
-#         x = rocket['predict'](x, u, p0, t, dt)
+def simulate(rocket, x0, p0, dt=0.005, t0=0, tf=5):
+    """
+    An integrator using a fixed step runge-kutta approach.
+    """
+    x = x0
+    u = rocket['control'](x0, p0, t0, dt)
+    data = {
+        't': [],
+        'x': [],
+        'u': []
+    }
+    for t in np.arange(t0, tf, dt):
+        data['t'].append(t)
+        data['x'].append(np.array(x).reshape(-1))
+        data['u'].append(np.array(u).reshape(-1))
+        u = rocket['control'](x, p0, t, dt)
+        x = rocket['predict'](x, u, p0, t, dt)
    
-#     for k in data.keys():
-#         data[k] = np.array(data[k])
-#     return data
+    for k in data.keys():
+        data[k] = np.array(data[k])
+    return data
 
 
 def gazebo_equations():
@@ -385,30 +336,19 @@ def code_generation():
     u = ca.SX.sym('u', 4)
     t = ca.SX.sym('t')
     dt = ca.SX.sym('dt')
-
-    gz_eqs = gazebo_equations()    
+    gz_eqs = gazebo_equations()
     f_state = gz_eqs['state_from_gz']
-    
     eqs = rocket_equations()
-    
-    ctrl_eqs = control_equations()
-    f_control = ctrl_eqs['pitch_control']
-
-    C_FLT_FRB       = gz_eqs['C_FLT_FRB']
-    F_FRB, M_FRB    = eqs['force_moment'](x, u, p)
-    F_FLT           = ca.mtimes(C_FLT_FRB, F_FRB)
-    M_FLT           = ca.mtimes(C_FLT_FRB, M_FRB)
-
-    #Casadi functions------------------------------------------------------------------ 
-
+    C_FLT_FRB = gz_eqs['C_FLT_FRB']
+    F_FRB, M_FRB = eqs['force_moment'](x, u, p)
+    F_FLT = ca.mtimes(C_FLT_FRB, F_FRB)
+    M_FLT = ca.mtimes(C_FLT_FRB, M_FRB)
     f_u_to_fin = ca.Function('rocket_u_to_fin', [u], [u_to_fin(u)], ['u'], ['fin'])
-    
-    #Rocket force & moment calculations
     f_force_moment = ca.Function('rocket_force_moment',
         [x, u, p], [F_FLT, M_FLT], ['x', 'u', 'p'], ['F_FLT', 'M_FLT'])
-
-    #----------------------------------------------------------------------------------
-
+    u_control = eqs['control'](x, p, t, dt)
+    f_control = ca.Function('rocket_control', [x, p, t, dt], [u_control],
+        ['x', 'p', 't', 'dt'], ['u'])
     gen = ca.CodeGenerator(
         'casadi_gen.c',
         {'main': False, 'mex': False, 'with_header': True, 'with_mem': True})
@@ -532,9 +472,9 @@ def do_trim(vt, gamma_deg, m_fuel):
 
     fmt_str = 'status:\t{:s}\nf:\t{:5.3f}\ng:\t{:s}\nm_dot:\t{:5.3f} kg/s\nalpha:\t{:5.3f} deg\nbeta:\t{:5.3f} deg\n' \
             'ail:\t{:5.3f} deg\nelv:\t{:5.3f} deg\nrdr:\t{:5.3f} deg\ntheta:\t{:5.3f} deg'
-    # print(fmt_str.format(
-    #     res['status'], res['f'], str(res['g']),
-    #     m_dot, alpha_deg, beta_deg, ail_deg, elv_deg, rdr_deg, theta_deg))
+    print(fmt_str.format(
+        res['status'], res['f'], str(res['g']),
+        m_dot, alpha_deg, beta_deg, ail_deg, elv_deg, rdr_deg, theta_deg))
 
     # s: m_dot, alpha, beta, ail, elev, rdr
     # u:  m_dot, aileron, elevator, rudder
@@ -545,11 +485,8 @@ def do_trim(vt, gamma_deg, m_fuel):
 def run():
     rocket = rocket_equations()
     x0, p0 = rocket['initialize'](np.rad2deg(1.2))
-    
-    control_eqn = control_equations()
-    
     # m_dot, aileron, elevator, rudder
-    data = simulate(rocket, control_eqn, x0, p0)
+    data = simulate(rocket, x0, p0, tf=15)
     analyze_data(data)
     plt.savefig('rocket.png')
     plt.show()
@@ -569,34 +506,32 @@ def linearize():
     return ca.Function('ss', [x, u, p], [A, B, C, D],
             ['x', 'u', 'p'], ['A', 'B', 'C', 'D'])
 
-def control_rocket(x,p,t):
-    u = ca.SX.sym('u',4)
-
-    return u
-
-
-def plan_traj():
-    path_points = [do_trim(vt=100, gamma_deg=90, m_fuel=0.8)]
-    path_points.append(do_trim(vt=100, gamma_deg= 45, m_fuel = 0.4))
-    path_points.append(do_trim(vt=100, gamma_deg = 0,m_fuel = 0))
-    lin = linearize()
-    sys = []
-    ABCDs = []
-    gam_ref = [90,45,0]
-    h_ref = [0,]
-    for i,p in enumerate(path_points):
-        x0 = p[0]
-        u0 = p[1]
-        p0 = p[2]
-        A,B,C,D = lin(x0,u0,p0)
-        ABCDs.append([A,B,C,D])
-        sys.append(control.ss(A,B,C,D))
-    
-    return sys
-
 
 if __name__ == "__main__":
-    #run()
+    run()
     code_generation()
+
+    x0, u0, p0 = do_trim(vt=100, gamma_deg=90, m_fuel=0.8)
+    lin = linearize()
+    import control
+    sys1 = control.ss(*lin(x0, u0, p0))
+
+    # get pitch rate from elevator
+    G = control.ss2tf(sys1[1, 2])
+    control.rlocus(G)
+    plt.show()
+
+    # next steps
+    # pitch rate pid design, use this to control pitch angle
+    # use flight path angle to control altitude
+
+    #print(x0, u0, p0)
+    #print(sys1)
+    # sys2 = do_trim(vt=50, gamma_deg=90, m_fuel=0.0)
+    
+    # pid design to get gains, manually for now using root locus
+
+    # schedule gains
+    # gains = gain_schedule(gains1, gains2, t)
 
 

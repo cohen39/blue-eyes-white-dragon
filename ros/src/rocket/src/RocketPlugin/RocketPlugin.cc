@@ -33,8 +33,8 @@ GZ_REGISTER_MODEL_PLUGIN(RocketPlugin)
 RocketPlugin::RocketPlugin():
     state_from_gz(state_from_gz_functions()),
     rocket_u_to_fin(rocket_u_to_fin_functions()),
-    rocket_control(rocket_control_functions()),
-    rocket_force_moment(rocket_force_moment_functions())
+    rocket_force_moment(rocket_force_moment_functions()),
+    pitch_control(pitch_control_functions())
 {
     std::cout << "hello rocket plugin" << std::endl;
 }
@@ -123,6 +123,8 @@ void RocketPlugin::Load(physics::ModelPtr _model, sdf::ElementPtr _sdf)
     std::bind(&RocketPlugin::Update, this, std::placeholders::_1));
 
   gzlog << "Rocket ready to fly. The force will be with you" << std::endl;
+
+  t0 = this->model->GetWorld()->SimTime().Double();
 }
 
 /////////////////////////////////////////////////
@@ -131,7 +133,7 @@ void RocketPlugin::Update(const common::UpdateInfo &/*_info*/)
   std::lock_guard<std::mutex> lock(this->mutex);
 
   gazebo::common::Time curTime = this->model->GetWorld()->SimTime();
-  double t = this->model->GetWorld()->SimTime().Double();
+  double t = this->model->GetWorld()->SimTime().Double() - t0;
 
   if (curTime > this->lastUpdateTime)
   {
@@ -182,14 +184,28 @@ void RocketPlugin::Update(const common::UpdateInfo &/*_info*/)
     state_from_gz.res(0, x);
     state_from_gz.eval();
 
-    // control
+    // pitch control
     double u[4];
-    rocket_control.arg(0, x);
-    rocket_control.arg(1, p);
-    rocket_control.arg(2, &t);
-    rocket_control.arg(3, &dt);
-    rocket_control.res(0, u);
-    rocket_control.eval();
+    double u_pitch_cmd                = 60*3.14159265/180;
+
+      //Reference pitch 
+    if(t>1)
+      u_pitch_cmd                     =(-0.521*t*t*t + 8.9935*t*t - 49.943*t + 90.646)*3.14159265/180;
+
+    double y_elev_cmd           = 0; //initialize just in case
+    double x1_pitch_ctrl[2]     = {0,0};//initialize just in case    
+
+    pitch_control.arg(0, x_pitch_ctrl); //x_pitch_ctrl, u_pitch_cmd, x_rocket_state, p
+    pitch_control.arg(1, &u_pitch_cmd);
+    pitch_control.arg(2, x);
+    pitch_control.arg(3, p);
+
+    pitch_control.res(0, x_pitch_ctrl); //x1_pitch_ctrl, y_elev_cmd
+    pitch_control.res(1, &y_elev_cmd);
+    
+    pitch_control.eval();
+
+    u[2]         = y_elev_cmd;
 
     // force moment
     double F_FLT[3];

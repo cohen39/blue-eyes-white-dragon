@@ -33,8 +33,8 @@ GZ_REGISTER_MODEL_PLUGIN(RocketPlugin)
 RocketPlugin::RocketPlugin():
     state_from_gz(state_from_gz_functions()),
     rocket_u_to_fin(rocket_u_to_fin_functions()),
-    rocket_force_moment(rocket_force_moment_functions()),
-    pitch_control(pitch_control_functions())
+    rocket_control(pitch_ctrl_functions()),
+    rocket_force_moment(rocket_force_moment_functions())
 {
     std::cout << "hello rocket plugin" << std::endl;
 }
@@ -123,7 +123,6 @@ void RocketPlugin::Load(physics::ModelPtr _model, sdf::ElementPtr _sdf)
     std::bind(&RocketPlugin::Update, this, std::placeholders::_1));
 
   gzlog << "Rocket ready to fly. The force will be with you" << std::endl;
-
   t0 = this->model->GetWorld()->SimTime().Double();
 }
 
@@ -184,29 +183,31 @@ void RocketPlugin::Update(const common::UpdateInfo &/*_info*/)
     state_from_gz.res(0, x);
     state_from_gz.eval();
 
-    // pitch control
-    double u[4];
-    double u_pitch_cmd                = 60*3.14159265/180;
-
-      //Reference pitch 
-    if(t>1)
-      u_pitch_cmd                     =(-0.521*t*t*t + 8.9935*t*t - 49.943*t + 90.646)*3.14159265/180;
-
-    double y_elev_cmd           = 0; //initialize just in case
-    double x1_pitch_ctrl[2]     = {0,0};//initialize just in case    
-
-    pitch_control.arg(0, x_pitch_ctrl); //x_pitch_ctrl, u_pitch_cmd, x_rocket_state, p
-    pitch_control.arg(1, &u_pitch_cmd);
-    pitch_control.arg(2, x);
-    pitch_control.arg(3, p);
-
-    pitch_control.res(0, x_pitch_ctrl); //x1_pitch_ctrl, y_elev_cmd
-    pitch_control.res(1, &y_elev_cmd);
+    // control
+    double pitch_ref = 0;
+    gzdbg << "t: "<<t<< "dt: "<< dt << std::endl;
+  
+    if (t < 1){
+      pitch_ref = 60;
+    }
+    else
+    {
+      pitch_ref = (-0.521*t*t*t + 8.9935*t*t - 49.943*t + 90.646);
+    }
+    gzdbg << "Pitch_ref: " << pitch_ref << std::endl;
+    pitch_ref = pitch_ref*3.14159265359/180.0;
     
-    pitch_control.eval();
-
-    u[2]         = y_elev_cmd;
-
+    double mrp[4] = {x[3],x[4],x[5],x[6]};
+    rocket_control.arg(0, x_ctrl);
+    rocket_control.arg(1, mrp);
+    rocket_control.arg(2, &pitch_ref);
+    rocket_control.res(0, x_ctrl);
+    rocket_control.res(1, &u[2]);
+    rocket_control.eval();
+    if(m_fuel <= 0)
+    {
+      u[2] = 0;
+    }
     // force moment
     double F_FLT[3];
     double M_FLT[3];
@@ -227,7 +228,7 @@ void RocketPlugin::Update(const common::UpdateInfo &/*_info*/)
     }
 
     // integration for rocket mass flow
-    double m_dot = u[0];
+    m_dot = u[0];
     m -= m_dot*dt;
     if (m < m_empty) {
       m = m_empty;
@@ -237,15 +238,15 @@ void RocketPlugin::Update(const common::UpdateInfo &/*_info*/)
     inertial->SetInertiaMatrix(Jx + m_fuel*l_motor*l_motor, Jy + m_fuel*l_motor*l_motor, Jz, 0, 0, 0);
 
     // debug
-    for (int i=0; i<14; i++) {
-      gzdbg << "x[" << i << "]: " << x[i] << "\n";
-    }
+    // for (int i=0; i<14; i++) {
+    //   gzdbg << "x[" << i << "]: " << x[i] << "\n";
+    // }
     for (int i=0; i<4; i++) {
       gzdbg << "u[" << i << "]: " << u[i] << "\n";
     }
-    for (int i=0; i<15; i++) {
-      gzdbg << "p[" << i << "]: " << p[i] << "\n";
-    }
+    // for (int i=0; i<15; i++) {
+    //   gzdbg << "p[" << i << "]: " << p[i] << "\n";
+    // }
     gzdbg << std::endl;
     gzdbg << "mass: " << m << std::endl;
     gzdbg << "force: " << F_FLT[0] << " " << F_FLT[1] << " " << F_FLT[2] << std::endl;

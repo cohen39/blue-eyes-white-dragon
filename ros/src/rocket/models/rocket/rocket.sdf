@@ -15,10 +15,11 @@
         </geometry>
       </collision>
       <visual name='body_visual'>
-        <pose>0 0 0 0 1.57 0</pose>
+        <pose>0 0 0 0 0 -1.57</pose>
         <geometry>
           <mesh>
-            <uri>model://rocket/meshes/stl/body.stl</uri>
+            <uri>model://rocket/meshes/stl/bewd.stl</uri>
+            <scale>0.015 0.015 0.015</scale>
           </mesh>
         </geometry>
         <material>

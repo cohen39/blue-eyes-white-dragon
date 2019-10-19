@@ -377,7 +377,6 @@ def gazebo_equations():
         'C_FLT_FRB': C_FLT_FRB
     }
 
-
 def code_generation():
     x = ca.SX.sym('x', 14)
     x_gz = ca.SX.sym('x_gz', 14)
@@ -408,6 +407,15 @@ def code_generation():
         [x, u, p], [F_FLT, M_FLT], ['x', 'u', 'p'], ['F_FLT', 'M_FLT'])
 
     #----------------------------------------------------------------------------------
+    pitch_ctrl = control_rocket()
+    theta_ref = ca.SX.sym('theta_ref',1)
+    mrp = ca.SX.sym('mrp',4)
+    euler = so3.Euler.from_mrp(mrp)
+    theta_cur = euler[1]
+    theta_err = theta_ref-theta_cur
+    x_ctrl = ca.SX.sym('x_ctrl',2)
+    x1_ctrl, u_elv = pitch_ctrl(x_ctrl,theta_err)
+    f_control = ca.Function('pitch_ctrl',[x_ctrl,mrp,theta_ref],[x1_ctrl,u_elv],['x_ctrl','mrp','theta_ref'],['x1_ctrl','u_elv'])
 
     gen = ca.CodeGenerator(
         'casadi_gen.c',
@@ -514,7 +522,6 @@ def trim(vt, gamma, m_fuel, rhs, p, s0=None):
         'status': stats['return_status']
     }
 
-
 def do_trim(vt, gamma_deg, m_fuel):
     rocket = rocket_equations()
     x0, p0 = rocket['initialize'](90)
@@ -569,10 +576,20 @@ def linearize():
     return ca.Function('ss', [x, u, p], [A, B, C, D],
             ['x', 'u', 'p'], ['A', 'B', 'C', 'D'])
 
-def control_rocket(x,p,t):
-    u = ca.SX.sym('u',4)
+def control_rocket():
+    s = control.tf([1, 0], [0, 1])
+    H = 10*(s/100+1)*(s/100+1)/s*(70/(s+70))
+    
+    Hd = control.tf2ss(control.c2d(H, 0.004))
+    x = ca.SX.sym('x', 2)
+    u = ca.SX.sym('u', 1)
+    x1 = ca.mtimes(Hd.A, x) + ca.mtimes(Hd.B, u)
+    y = ca.mtimes(Hd.C, x) + ca.mtimes(Hd.D, u)
 
-    return u
+    f_control1 = ca.Function('control_elv', [x, u], [x1, y], ['x', 'u'], ['x1', 'y'])
+    # f_control2 = ca.Function('control_h',[])
+    
+    return f_control1
 
 
 def plan_traj():

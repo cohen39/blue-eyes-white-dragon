@@ -1,7 +1,7 @@
 import casadi as ca
 import numpy as np
 import sys
-
+import control
 
 sys.path.insert(0, '../../../../../python/pyecca')
 
@@ -158,33 +158,15 @@ def rocket_equations(jit=True):
     pitch_d = 1.0
 
     euler = so3.Euler.from_mrp(r_nb) # roll, pitch, yaw
-    pitch = euler[1]    
+    pitch = euler[1]
 
     # control
     u_control = ca.SX.zeros(4)
     # these controls are just test controls to make sure the fins are working
-
-    u_control[0] = 0.1  # mass flow rate
-
-    import control
-    s = control.tf([1, 0], [0, 1])
-    H = 140*(s+50)*(s+50)/(s*(2138*s + 208.8))
-    Hd = control.tf2ss(control.c2d(H, 0.01))
-
-    theta_c = (100 - p_n[2]) * (0.01)/(v_b[2] * ca.cos(p_n[2]))
-
-    x_elev = ca.SX.sym('x_elev', 2)
-    u_elev = ca.SX.sym('u_elev', 1)
-    x_1 = ca.mtimes(Hd.A, x_elev) + ca.mtimes(Hd.B, u_elev)
-    y_elev = ca.mtimes(Hd.C, x_elev) + ca.mtimes(Hd.D, u_elev)
-
-    elev_c = (theta_c - p_n[2]) * y_elev / (0.5 * rho * v_b[2]**2)
-
     u_control[0] = 0.1  # mass flow rate
     u_control[1] = 0
-    u_control[2] = elev_c
+    u_control[2] = (pitch - 1)
     u_control[3] = 0
-    
     control = ca.Function('control', [x, p, t, dt], [u_control],
         ['x', 'p', 't', 'dt'], ['u'])
 
@@ -211,6 +193,8 @@ def rocket_equations(jit=True):
         'u': u,
         'p': p
     }
+    return rhs, x, u, p
+
 
 def analyze_data(data):
     plt.figure(figsize=(20, 20))
@@ -345,6 +329,7 @@ def gazebo_equations():
         'C_FLT_FRB': C_FLT_FRB
     }
 
+
 def code_generation():
     x = ca.SX.sym('x', 14)
     x_gz = ca.SX.sym('x_gz', 14)
@@ -373,6 +358,7 @@ def code_generation():
     gen.add(f_control)
     gen.add(f_u_to_fin)
     gen.generate()
+
 
 def constrain(s, vt, gamma, m_fuel):
     # s is our design vector:
@@ -469,6 +455,7 @@ def trim(vt, gamma, m_fuel, rhs, p, s0=None):
         'status': stats['return_status']
     }
 
+
 def do_trim(vt, gamma_deg, m_fuel):
     rocket = rocket_equations()
     x0, p0 = rocket['initialize'](90)
@@ -486,22 +473,22 @@ def do_trim(vt, gamma_deg, m_fuel):
 
     fmt_str = 'status:\t{:s}\nf:\t{:5.3f}\ng:\t{:s}\nm_dot:\t{:5.3f} kg/s\nalpha:\t{:5.3f} deg\nbeta:\t{:5.3f} deg\n' \
             'ail:\t{:5.3f} deg\nelv:\t{:5.3f} deg\nrdr:\t{:5.3f} deg\ntheta:\t{:5.3f} deg'
-    print(fmt_str.format(
-        res['status'], res['f'], str(res['g']),
-        m_dot, alpha_deg, beta_deg, ail_deg, elv_deg, rdr_deg, theta_deg))
+    # print(fmt_str.format(
+    #     res['status'], res['f'], str(res['g']),
+    #     m_dot, alpha_deg, beta_deg, ail_deg, elv_deg, rdr_deg, theta_deg))
 
     # s: m_dot, alpha, beta, ail, elev, rdr
     # u:  m_dot, aileron, elevator, rudder
     u0 = [s[0], s[3], s[4], s[5]]
     return x, u0, p0
     
+
 def run():
     rocket = rocket_equations()
     x0, p0 = rocket['initialize'](np.rad2deg(1.2))
     # m_dot, aileron, elevator, rudder
     data = simulate(rocket, x0, p0, tf=15)
-    analyze_data(data)    
-
+    analyze_data(data)
     plt.savefig('rocket.png')
     plt.show()
 
@@ -520,11 +507,49 @@ def linearize():
     return ca.Function('ss', [x, u, p], [A, B, C, D],
             ['x', 'u', 'p'], ['A', 'B', 'C', 'D'])
 
-if __name__ == "__main__":
-    run()
-    code_generation()
+def control_rocket(x,p,t):
+    u = ca.SX.sym('u',4)
 
+    return u
+
+
+def plan_traj():
+    path_points = [do_trim(vt=100, gamma_deg=90, m_fuel=0.8)]
+    path_points.append(do_trim(vt=100, gamma_deg= 45, m_fuel = 0.4))
+    path_points.append(do_trim(vt=100, gamma_deg = 0,m_fuel = 0))
+    lin = linearize()
+    sys = []
+    ABCDs = []
+    gam_ref = [90,45,0]
+    h_ref = [0,]
+    for i,p in enumerate(path_points):
+        x0 = p[0]
+        u0 = p[1]
+        p0 = p[2]
+        A,B,C,D = lin(x0,u0,p0)
+        ABCDs.append([A,B,C,D])
+        sys.append(control.ss(A,B,C,D))
     
+    return sys
+
+
+if __name__ == "__main__":
+    #run()
+    #code_generation()
+    plan_traj()
+
+    sys = plan_traj()
+    # get pitch rate from elevator
+    Gp1 = control.ss2tf(sys[0][1, 2])
+    plt.figure()
+    control.rlocus(Gp1)
+    plt.show()
+
+    Gp2 = control.ss2tf(sys[1][1,2])
+    plt.figure()
+    control.rlocus(Gp2)
+    plt.show()
+
     # next steps
     # pitch rate pid design, use this to control pitch angle
     # use flight path angle to control altitude
@@ -537,3 +562,5 @@ if __name__ == "__main__":
 
     # schedule gains
     # gains = gain_schedule(gains1, gains2, t)
+
+

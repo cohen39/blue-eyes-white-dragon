@@ -9,6 +9,7 @@ import matplotlib.pyplot as plt
 import pyecca.lie.so3 as so3
 from pyecca.util import rk4
 
+
 def u_to_fin(u):
     ail = u[1]
     elv = u[2]
@@ -145,8 +146,7 @@ def rocket_equations(jit=True):
     x0 = ca.SX.sym('x', 14)
     x1 = rk4(lambda t, x: rhs(x, u, p), t0, x0, h)
     x1[3:7] = so3.Mrp.shadow_if_necessary(x1[3:7])
-    euler1 = so3.Euler.from_mrp(x1[3:7])
-    predict = ca.Function('predict', [x0, u, p, t0, h], [x1,euler1], {'jit': jit})
+    predict = ca.Function('predict', [x0, u, p, t0, h], [x1], {'jit': jit})
 
     def schedule(t, start, ty_pairs):
         val = start
@@ -159,7 +159,7 @@ def rocket_equations(jit=True):
 
     euler = so3.Euler.from_mrp(r_nb) # roll, pitch, yaw
     pitch = euler[1]
-    
+
     # control
     u_control = ca.SX.zeros(4)
     # these controls are just test controls to make sure the fins are working
@@ -193,6 +193,8 @@ def rocket_equations(jit=True):
         'u': u,
         'p': p
     }
+    return rhs, x, u, p
+
 
 def analyze_data(data):
     plt.figure(figsize=(20, 20))
@@ -254,51 +256,33 @@ def analyze_data(data):
     plt.subplot(337)
     #plt.title('control input')
     plt.plot(data['t'], data['u'][:, 0], label='mdot')
-    # plt.plot(data['t'], data['u'][:, 1], label='aileron')
+    plt.plot(data['t'], data['u'][:, 1], label='aileron')
     plt.plot(data['t'], data['u'][:, 2], label='elevator')
-    # plt.plot(data['t'], data['u'][:, 3], label='rudder')
+    plt.plot(data['t'], data['u'][:, 3], label='rudder')
     plt.xlabel('t, sec')
     plt.ylabel('control')
     plt.legend()
     plt.grid()
 
-def ref_traj(t,t0,tf):
-    h_ref = 100
-    if t < (tf-t0)/5.0:
-        theta_ref = 90
-    elif (tf-t0)/5.0 <= t and t <= (tf-t0)/4.0:
-        theta_ref = 45
-    else:
-        theta_ref = 0
-    return theta_ref,h_ref
-        
 
-
-def simulate(rocket, x0, p0, dt=0.01, t0=0, tf=5):
+def simulate(rocket, x0, p0, dt=0.005, t0=0, tf=5):
     """
     An integrator using a fixed step runge-kutta approach.
     """
     x = x0
-    x_control = [0,0]
-    theta_err = 0
-    x_control, u_elv = control_rocket()(x_control,theta_err)
-    u = np.array([0.1,0,u_elv,0])
+    u = rocket['control'](x0, p0, t0, dt)
     data = {
         't': [],
         'x': [],
         'u': []
     }
-
     for t in np.arange(t0, tf, dt):
         data['t'].append(t)
         data['x'].append(np.array(x).reshape(-1))
         data['u'].append(np.array(u).reshape(-1))
-        theta_ref, h_ref = ref_traj(t,t0,tf)
-        x_control,u[2] = control_rocket()(x_control,theta_err)
-        out = rocket['predict'](x, u, p0, t, dt)
-        x = out[0]
-        euler = out[1]
-        theta_err = np.deg2rad(theta_ref) - euler[1]
+        u = rocket['control'](x, p0, t, dt)
+        x = rocket['predict'](x, u, p0, t, dt)
+   
     for k in data.keys():
         data[k] = np.array(data[k])
     return data
@@ -364,7 +348,8 @@ def code_generation():
     f_force_moment = ca.Function('rocket_force_moment',
         [x, u, p], [F_FLT, M_FLT], ['x', 'u', 'p'], ['F_FLT', 'M_FLT'])
     u_control = eqs['control'](x, p, t, dt)
-    f_control = control_rocket()
+    f_control = ca.Function('rocket_control', [x, p, t, dt], [u_control],
+        ['x', 'p', 't', 'dt'], ['u'])
     gen = ca.CodeGenerator(
         'casadi_gen.c',
         {'main': False, 'mex': False, 'with_header': True, 'with_mem': True})
@@ -500,7 +485,7 @@ def do_trim(vt, gamma_deg, m_fuel):
 
 def run():
     rocket = rocket_equations()
-    x0, p0 = rocket['initialize'](90)
+    x0, p0 = rocket['initialize'](np.rad2deg(1.2))
     # m_dot, aileron, elevator, rudder
     data = simulate(rocket, x0, p0, tf=15)
     analyze_data(data)
@@ -522,20 +507,10 @@ def linearize():
     return ca.Function('ss', [x, u, p], [A, B, C, D],
             ['x', 'u', 'p'], ['A', 'B', 'C', 'D'])
 
-def control_rocket(dt=0.01):
-    s = control.tf([1, 0], [0, 1])
-    H = 10*(s/100+1)*(s/100+1)/s**2
-    Hd = control.tf2ss(control.c2d(H, 0.01))
+def control_rocket(x,p,t):
+    u = ca.SX.sym('u',4)
 
-    x = ca.SX.sym('x', 2)
-    u = ca.SX.sym('u', 1)
-    x1 = ca.mtimes(Hd.A, x) + ca.mtimes(Hd.B, u)
-    y = ca.mtimes(Hd.C, x) + ca.mtimes(Hd.D, u)
-
-    f_control1 = ca.Function('control_elv', [x, u], [x1, y], ['x', 'u'], ['x1', 'y'])
-    # f_control2 = ca.Function('control_h',[])
-
-    return f_control1
+    return u
 
 
 def plan_traj():
@@ -546,6 +521,7 @@ def plan_traj():
     sys = []
     ABCDs = []
     gam_ref = [90,45,0]
+    h_ref = [0,]
     for i,p in enumerate(path_points):
         x0 = p[0]
         u0 = p[1]
@@ -558,9 +534,22 @@ def plan_traj():
 
 
 if __name__ == "__main__":
-    run()
+    #run()
     #code_generation()
-    
+    plan_traj()
+
+    sys = plan_traj()
+    # get pitch rate from elevator
+    Gp1 = control.ss2tf(sys[0][1, 2])
+    plt.figure()
+    control.rlocus(Gp1)
+    plt.show()
+
+    Gp2 = control.ss2tf(sys[1][1,2])
+    plt.figure()
+    control.rlocus(Gp2)
+    plt.show()
+
     # next steps
     # pitch rate pid design, use this to control pitch angle
     # use flight path angle to control altitude

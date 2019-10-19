@@ -211,8 +211,6 @@ def rocket_equations(jit=True):
         'u': u,
         'p': p
     }
-    return rhs, x, u, p
-
 
 def analyze_data(data):
     plt.figure(figsize=(20, 20))
@@ -376,7 +374,6 @@ def code_generation():
     gen.add(f_u_to_fin)
     gen.generate()
 
-
 def constrain(s, vt, gamma, m_fuel):
     # s is our design vector:
     m_dot = s[0]
@@ -472,7 +469,6 @@ def trim(vt, gamma, m_fuel, rhs, p, s0=None):
         'status': stats['return_status']
     }
 
-
 def do_trim(vt, gamma_deg, m_fuel):
     rocket = rocket_equations()
     x0, p0 = rocket['initialize'](90)
@@ -499,7 +495,6 @@ def do_trim(vt, gamma_deg, m_fuel):
     u0 = [s[0], s[3], s[4], s[5]]
     return x, u0, p0
     
-
 def run():
     rocket = rocket_equations()
     x0, p0 = rocket['initialize'](np.rad2deg(1.2))
@@ -525,7 +520,6 @@ def linearize():
     return ca.Function('ss', [x, u, p], [A, B, C, D],
             ['x', 'u', 'p'], ['A', 'B', 'C', 'D'])
 
-
 if __name__ == "__main__":
     run()
     code_generation()
@@ -543,5 +537,3 @@ if __name__ == "__main__":
 
     # schedule gains
     # gains = gain_schedule(gains1, gains2, t)
-
-

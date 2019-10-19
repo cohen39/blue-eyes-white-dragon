@@ -87,6 +87,8 @@ namespace gazebo
     private: CasadiFunc rocket_u_to_fin;
     private: CasadiFunc rocket_control;
     private: CasadiFunc rocket_force_moment;
+
+    private: double x_control[2] = {0,0};
   };
 }
 #endif
